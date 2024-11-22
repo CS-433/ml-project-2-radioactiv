@@ -7,7 +7,8 @@ def create_folder(folder_name):
 
 def create_tex_file(tex_content, filename="document.tex"):
     """Create a .tex file with the given content."""
-    tex_dir = "tex_files"
+    base_dir = "generated_data"
+    tex_dir = os.path.join(base_dir, "tex")
     create_folder(tex_dir)  # Ensure the folder exists
     tex_path = os.path.join(tex_dir, filename)
     with open(tex_path, "w", encoding="utf-8") as tex_file:
@@ -15,8 +16,9 @@ def create_tex_file(tex_content, filename="document.tex"):
     return tex_path
 
 def compile_tex_to_pdf(tex_path):
-    """Compile a TeX file into a PDF and store the PDF in the 'pdf_files' folder."""
-    pdf_dir = "pdf_files"
+    """Compile a TeX file into a PDF and store the PDF in the 'pdf' subfolder."""
+    base_dir = "generated_data"
+    pdf_dir = os.path.join(base_dir, "pdf")
     create_folder(pdf_dir)  # Ensure the folder exists
     
     tex_dir = os.path.dirname(tex_path)
@@ -32,13 +34,18 @@ def compile_tex_to_pdf(tex_path):
         print("PDF was not created successfully.")
         return None
     
+    # Delete the existing file at the destination if it exists
+    if os.path.exists(pdf_path_final):
+        os.remove(pdf_path_final)
+
     # Move the PDF to the designated folder
     os.rename(pdf_path_temp, pdf_path_final)
     return pdf_path_final
 
 def convert_pdf_to_png(pdf_path, output_png="document.png"):
-    """Convert a PDF to PNG format and store the PNG in the 'png_files' folder."""
-    png_dir = "png_files"
+    """Convert a PDF to PNG format and store the PNG in the 'png' subfolder."""
+    base_dir = "generated_data"
+    png_dir = os.path.join(base_dir, "png")
     create_folder(png_dir)  # Ensure the folder exists
     
     output_path = os.path.join(png_dir, output_png)
