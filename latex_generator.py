@@ -66,11 +66,11 @@ class LatexGenerator:
             # Extract LaTeX content starting from the first LaTeX command
             answer = answer[answer.find('\\'):]
 
-            directory = 'generated_data/txt'
+            directory = 'generated_data/tex'
             os.makedirs(directory, exist_ok=True)
 
             # Write the generated LaTeX to a file
-            file_name = f'{directory}/answer_{i}.txt'
+            file_name = f'{directory}/answer_{i}.tex'
             with open(file_name, 'w') as f:
                 f.write(answer)
 
