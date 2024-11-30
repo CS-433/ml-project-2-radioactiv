@@ -78,6 +78,6 @@ class LatexGenerator:
 
 if __name__ == "__main__":
     # Replace with API key
-    api_key = "sk-rc-gNqk64G9aEO7nnxOEnpvmw"
+    api_key = "..."
     generator = LatexGenerator(api_key, font="JaneAusten", iterations=3)
     generator.generate_latex()
