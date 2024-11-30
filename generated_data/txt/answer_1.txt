@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{mathspec}
+\usepackage[paperwidth=6in,margin=0.1in]{geometry}
+
+\setmainfont{JaneAusten}
+\setmathsfont(Digits,Latin){JaneAusten}
+
+\begin{document}
+
+\section*{Exercise 1}
+
+Solve for $x$: $\sqrt[3]{2x+1} = 2\sqrt{x-1}$
+
+\subsection*{Solution}
+
+To solve this equation, we need to isolate $x$. First, we can start by cubing both sides of the equation to get rid of the cube root:
+
+$$\left(\sqrt[3]{2x+1}\right)^3 = \left(2\sqrt{x-1}\right)^3$$
+
+This simplifies to:
+
+$$2x+1 = 8(x-1)$$
+
+Next, we can expand the right-hand side and combine like terms:
+
+$$2x+1 = 8x-8$$
+
+Subtracting $2x$ from both sides gives:
+
+$$1 = 6x-8$$
+
+Adding 8 to both sides gives:
+
+$$9 = 6x$$
+
+Finally, dividing both sides by 6 gives:
+
+$$x = \frac{9}{6} = \boxed{1}$$
+
+Therefore, the solution to the equation is $x=1$.
+
+\end{document}
