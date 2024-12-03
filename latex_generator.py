@@ -1,5 +1,6 @@
 import openai
 import os
+from dotenv import load_dotenv
 
 class LatexGenerator:
     def __init__(self, api_key, base_url="https://fmapi.swissai.cscs.ch", font="JaneAusten", iterations=5):
@@ -77,7 +78,7 @@ class LatexGenerator:
             print(f"Generated LaTeX solution for exercise {i}: {file_name}")
 
 if __name__ == "__main__":
-    # Replace with API key
-    api_key = "..."
+    load_dotenv()
+    api_key = os.getenv("API_KEY")
     generator = LatexGenerator(api_key, font="JaneAusten", iterations=3)
     generator.generate_latex()
