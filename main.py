@@ -2,6 +2,7 @@ import os
 from latex_generator import LatexGenerator
 from latex_utils import *
 from stroke_extraction import handwrite
+from dotenv import load_dotenv
 
 def transform_handwriting(input_dir="generated_data/pdf"):
     """Transform all PDF files in the 'pdf' subfolder to handwritten SVG and PNG files."""
@@ -10,10 +11,11 @@ def transform_handwriting(input_dir="generated_data/pdf"):
         handwrite(pdf_file, "./generated_data/svg/handwriting_strokes.svg", "./generated_data/png/handwriting_strokes_1.png")
 
 if __name__ == "__main__":
+    load_dotenv()
+    api_key = os.getenv("API_KEY")
 
-    api_key = "..."
-    # generator = LatexGenerator(api_key, iterations=3)
-    # generator.generate_latex()
+    generator = LatexGenerator(api_key, iterations=2)
+    generator.generate_latex()
 
     fonts = ["JaneAusten"]
     pagecolors = ["white"]
