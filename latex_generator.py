@@ -2,7 +2,7 @@ import openai
 import os
 
 class LatexGenerator:
-    def __init__(self, api_key, base_url="https://fmapi.swissai.cscs.ch", font="JaneAusten", iterations=5):
+    def __init__(self, api_key, base_url="https://fmapi.swissai.cscs.ch", iterations=5):
         """
         Initializes the LatexGenerator instance.
 
@@ -12,22 +12,12 @@ class LatexGenerator:
         :param iterations: Number of solutions to generate
         """
         self.client = openai.Client(api_key=api_key, base_url=base_url)
-        self.font = font
         self.iterations = iterations
+
         self.header_template = r"""
-        You have to start your answer with the following structure for the latex font :
-        \documentclass{article}
-        \usepackage{fontspec}
-        \usepackage{amsmath}
-        \usepackage{mathspec}
-        \usepackage[paperwidth=6in,margin=0.1in]{geometry}
-
-        \setmainfont{%s}
-        \setmathsfont(Digits,Latin){%s}
-
+        You have to start your answer with the following structure for the latex header :
         \begin{document}
-
-        """ % (self.font, self.font)
+        """
 
     def generate_latex_question(self, exercise_number, answer):
         """
@@ -43,6 +33,8 @@ class LatexGenerator:
         """
         Generates LaTeX solutions for a series of math exercises and writes them to files.
         """
+        # print that we are generating i LaTeX files with their text color and page color
+        print(f"Generating LaTeX files...") 
         for i in range(1, self.iterations + 1):
             question = self.generate_latex_question(i, i)
             request = question + self.header_template
@@ -74,7 +66,7 @@ class LatexGenerator:
             with open(file_name, 'w') as f:
                 f.write(answer)
 
-            print(f"Generated LaTeX solution for exercise {i}: {file_name}")
+            print(f"Generated LaTeX {i}: {file_name}")
 
 if __name__ == "__main__":
     # Replace with API key

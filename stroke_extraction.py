@@ -105,7 +105,7 @@ def convert_svg_to_png(svg_path, png_path):
         img.save(filename=png_path)
 
 # Main function to execute the entire pipeline
-def main(pdf_path, svg_output_path, png_output_path):
+def handwrite(pdf_path, svg_output_path, png_output_path):
     # Step 1: Extract images from the PDF
     pages = extract_images_from_pdf(pdf_path)
     
@@ -132,7 +132,7 @@ def main(pdf_path, svg_output_path, png_output_path):
 
 # Example usage
 if __name__ == "__main__":
-    pdf_path = 'test2.pdf'  # Path to your PDF file
+    pdf_path = './generated_data/pdf/document.pdf'  # Path to your PDF file
     svg_output_path = 'handwriting_strokes.svg'  # Output SVG file path
     png_output_path = 'handwriting_strokes_1.png'  # Output PNG file path
-    main(pdf_path, svg_output_path, png_output_path)
+    handwrite(pdf_path, svg_output_path, png_output_path)
