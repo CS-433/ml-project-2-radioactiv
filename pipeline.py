@@ -27,19 +27,24 @@ def pipeline(k=10, api_key=None, base_dir="example_data"):
     generated_dir = os.path.join(base_dir, "generated")
     content_dir = os.path.join(base_dir, "tex_content")
     # generate data
-    # create a sequence of strings "english, french, german, italian" and a sequence of numbers 1, 2, 3, 4, 5 random and a sequence of booleans True, False all of length 10 and then zip them
+    # create a sequence of strings "english, french, german, italian" and other random parameters
+    # this can later be done systematically
     languages = random.choices(["English", "French", "German", "Italian"], k=k)
     numbers = random.choices([1, 2, 3, 4, 5], k=k)
     booleans = random.choices([True, False], k=k)
+    text_colors = random.choices(["red", "blue", "green", "yellow", 'black', 'white'], k=k)
+    background_colors = random.choices(["white", "black", "gray"], k=k)
+    hasGrids = random.choices([True, False], k=k)
+    hasStrikes = random.choices([True, False], k=k)
 
     # Zip them together
-    sequence = zip(languages, numbers, booleans)
+    sequence = zip(languages, numbers, booleans, text_colors, background_colors, hasGrids, hasStrikes)
 
     # Iterate over the sequence
-    for i, (lang, num, flag) in enumerate(sequence):
+    for i, (lang, num, flag, text_color, background_color, hasGrid, hasStrike) in enumerate(sequence):
         print(f"Generating PDF {i+1}/{k}...")
         prompt = get_math_exercise_prompt(
-            language=lang, complexity=num, correct=flag
+            language=lang, complexity=num, correct=flag, strike=hasStrike
         )
         response = model_communicator.communicate_with_model(prompt)
         print("Response:")
@@ -51,9 +56,11 @@ def pipeline(k=10, api_key=None, base_dir="example_data"):
             os.makedirs(os.path.join(content_dir, f"{i}"))
         path = os.path.join(content_dir, f"{i}", f"exercise_{lang}_{num}_{flag}.txt")
         if response:
+            filename = f"exercise_{lang}_{num}_{flag}_{text_color}_{background_color}_{'grid' if hasGrids else ''}_{'strike' if hasStrikes else ''}"
             with open(path, "w") as f:
                 f.write(response)
-            generate_pdf_from_tex(response, f"exercise_{lang}_{num}_{flag}", tex_files_dir + f"/{i}", out_dir=generated_dir + f"/{i}", verbose=True)
+            tex_code = get_tex_template(response, text_color=text_color, background_color=background_color, grid=hasGrid)
+            generate_pdf_from_tex(filename, tex_files_dir + f"/{i}", out_dir=generated_dir + f"/{i}", verbose=True, tex_code=tex_code)
 
 
 if __name__ == "__main__":

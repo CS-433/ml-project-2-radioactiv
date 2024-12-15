@@ -90,47 +90,118 @@ def crop_pdf(pdf_path, output_pdf=None):
 
 
 def get_tex_template(
-    content: str, mainfont: str = "JaneAusten", mathsfont: str = "JaneAusten"
+        content: str,
+        mainfont: str = "Times New Roman",
+        mathsfont: str = "Times New Roman",
+        text_color: str = "black",
+        background_color: str = "white",
+        grid: bool = False
 ) -> str:
     """
-    Generate a LaTeX template with specified font settings and content using string.Template.
+    Generate a LaTeX template with specified font settings, colors, grid, strike functionality, and content using string.Template.
 
     :param content: The LaTeX content to include in the document
     :param mainfont: The main font to use for the document
     :param mathsfont: The math font to use for equations
+    :param text_color: The color to use for the text
+    :param background_color: The color to use for the page background
+    :param grid: If True, includes a grid overlay on the page
     :return: A formatted LaTeX string
     """
+
+    # LaTeX code for the grid, only added if grid=True
+    grid_code = r"""
+    \usepackage{tikz}
+    \usepackage{eso-pic}
+    \AddToShipoutPictureBG{
+    \begin{tikzpicture}[remember picture, overlay]
+        \draw[step=5mm, black!20, thin] 
+            (current bounding box.south west) 
+            grid 
+            (current bounding box.north east);
+    \end{tikzpicture}
+    }
+    """ if grid else ""
+
+    # LaTeX code for the strike-through functionality
+    strike_code = r"""
+    \newcommand{\strike}[1]{
+        \begin{tikzpicture}[baseline=(text.base)]
+            \node[inner sep=1pt] (text) {#1};
+            \draw[line width=0.8pt] 
+                ($(text.west)+(0mm,0.1mm)$) .. controls 
+                ($(text.west)+(1.5mm,0.4mm)$) and
+                ($(text.center)+(-3mm,-0.1mm)$) ..
+                ($(text.center)+(-2mm,0.3mm)$) .. controls
+                ($(text.center)+(-1mm,0.1mm)$) and
+                ($(text.center)+(1mm,0.4mm)$) ..
+                ($(text.center)+(2mm,0.2mm)$) .. controls
+                ($(text.center)+(3mm,0.5mm)$) and
+                ($(text.east)+(-2mm,0mm)$) ..
+                ($(text.east)+(0mm,0.2mm)$);
+            \draw[line width=0.8pt] 
+                ($(text.west)+(0.2mm,-0.3mm)$) .. controls 
+                ($(text.west)+(2mm,-0.1mm)$) and
+                ($(text.center)+(-3.5mm,-0.5mm)$) ..
+                ($(text.center)+(-1.5mm,-0.2mm)$) .. controls
+                ($(text.center)+(0mm,-0.4mm)$) and
+                ($(text.center)+(1.5mm,-0.1mm)$) ..
+                ($(text.center)+(2.5mm,-0.3mm)$) .. controls
+                ($(text.center)+(3.5mm,-0.5mm)$) and
+                ($(text.east)+(-1.5mm,-0.2mm)$) ..
+                ($(text.east)+(-0.1mm,-0.3mm)$);
+        \end{tikzpicture}
+    }
+    """
+
+    # LaTeX preamble template with string placeholders
     template = Template(
         r"""
-\documentclass{article}
+\documentclass[varwidth=true, border=10mm]{standalone}
 \usepackage{fontspec}
 \usepackage{amsmath}
 \usepackage{mathspec}
-\usepackage[paperwidth=6in,margin=0.1in]{geometry}
+\usepackage{xcolor} 
+$grid_code
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+$strike_code
 
 \setmainfont{$mainfont}
 \setmathsfont(Digits,Latin){$mathsfont}
+\pagecolor{$background_color}
+\color{$text_color}
 
 \begin{document}
 $content
 \end{document}
 """
     )
-    return template.substitute(mainfont=mainfont, mathsfont=mathsfont, content=content)
+
+    # Substitute the values for each placeholder in the LaTeX template
+    return template.substitute(
+        mainfont=mainfont,
+        mathsfont=mathsfont,
+        background_color=background_color,
+        text_color=text_color,
+        grid_code=grid_code,
+        strike_code=strike_code,
+        content=content
+    )
 
 
 def generate_pdf_from_tex(
-        content: str,
         output_filename: str,
         tex_files_dir: str = "tex_files",
         out_dir: str = "output_files",
-        mainfont: str = "Times New Roman",
-        mathsfont: str = "Times New Roman",
         verbose: bool = False,
+        tex_code: str = "None"
 ) -> str:
     """
     Generates a PDF from LaTeX content using xelatex.
 
+    :param tex_code: The full LaTeX code to compile (optional).
     :param content: The LaTeX content without the preamble and document tags.
     :param output_filename: The name of the output PDF file (without extension).
     :param tex_files_dir: Directory to store intermediate .tex files.
@@ -141,7 +212,6 @@ def generate_pdf_from_tex(
     :return: The path to the generated PDF file.
     """
     # Create the full LaTeX code using the get_tex_template function
-    tex_code = get_tex_template(content, mainfont, mathsfont)
     if verbose:
         print("Generated LaTeX code:")
         print(tex_code)

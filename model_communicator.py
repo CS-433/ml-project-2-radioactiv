@@ -31,6 +31,8 @@ class ModelCommunicator:
 
             # Collect response chunks
             answer = ""
+            print("Response:")
+            print(response)
             for chunk in response:
                 if "choices" in chunk and chunk["choices"][0].get("delta", {}).get(
                     "content"
