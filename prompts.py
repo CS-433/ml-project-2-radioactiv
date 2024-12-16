@@ -1,9 +1,14 @@
 def get_math_exercise_prompt(
-    language: str = None, complexity: int = 3, correct: bool = True, strike: bool = False
+    language: str = None,
+    complexity: int = 3,
+    correct: bool = True,
+    strike: bool = False,
+    word_wiggeling: bool = True,
 ) -> str:
     """
     Generate a prompt for a math exercise with the specified complexity.
 
+    :param word_wiggeling: some words are not completely straight, they are jiggling a bit
     :param strike: Whether the exercise should include strikethrough text
     :param correct: Whether the solution should be correct or not
     :param language: The language for the exercise prompt (e.g., "German", "Italian", "French", or "English")
@@ -27,7 +32,8 @@ def get_math_exercise_prompt(
         complexity_lv = complexity
 
     strike_str = (
-        r'''To simulate student mistakes, incorporate strikethrough text using the following commands:
+        (
+            r"""To simulate student mistakes, incorporate strikethrough text using the following commands:
                 \simplestrike{simple strikes}
                 \scribblestrike{scribbled words or phrases}
                 \wigglestrike{wiggly lines}
@@ -36,19 +42,52 @@ def get_math_exercise_prompt(
                 \linestrike{connected line strikes}
                 \strike{general strike}
                 
-                Use these commands intermittently throughout the text to represent errors made by students.
-                '''
-    ) if strike else ""
+                Use these commands intermittently throughout the text to represent errors made by students. 
+                Like words that are crossed out. Or attempts to correct mistakes.
+                """
+        )
+        if strike
+        else ""
+    )
 
-    complexity_str = "The complexity level of the exercise is " + str(complexity_lv)
-    " out of 5, where 0 is simple like Kindergarten level and 5 is complex like Theoretical Quantum Physics. PHD level."
+    complexity_str = (
+        "The complexity level of the exercise is "
+        + str(complexity_lv)
+        + (
+            " out of 5, "
+            "where 0 is simple like "
+            "Kindergarten level and level 5 is "
+            "complex like Theoretical Quantum "
+            "Physics on PHD level with very very "
+            "long and complicated equations."
+        )
+    )
+
+    word_irrgeularities_str = (
+        (
+            r"you need to use the command \processtext{content} on some sentences, "
+            r"it is a latex command that introduces some "
+            r"irregularities in the shape of its content, "
+            r"that makes sure that the words are not in one straight line. "
+            r"Make Sure that this command is only used on sentences and normal words"
+            r" but not in math formulas or"
+            r" math expressions, as there the command does not work!!"
+            r"also the \processtext command is not compatible with the strike command!! "
+            r"that means a word or sentence can only ever be contained in "
+            r"one of those commands"
+        )
+        if word_wiggeling
+        else ""
+    )
 
     return (
         f"You are an helpful LLM that is part of generating data for a math handwriting recognition model. "
-        f"You are asked to generate math exercises and solutions for our dataset. The output you produced will be converted to handwriting"
+        f"You are asked to generate math exercises and solutions for our dataset. "
+        f"The output you produced will be converted to handwriting"
         f"Write a math exercise  in {language} with the following requirements:\n\n1. "
         f"Include mathematical expressions and text explanations.\n\n2. {correct_str}\n\n3. "
         f"{complexity_str}\n\n"
         f"{strike_str}\n\n"
-        f"Just reply with the desired output, nothing else!"
+        f"{word_irrgeularities_str}\n\n"
+        f"Just reply with the desired output, nothing else!!!"
     )

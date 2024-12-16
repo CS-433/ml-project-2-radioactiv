@@ -1,8 +1,11 @@
 import os
 import subprocess
 
+import numpy as np
 import openai
 from string import Template
+
+from PIL import Image, ImageFilter
 
 from os_utils import run_command, check_file_exists
 
@@ -12,9 +15,9 @@ def create_folder(folder_name):
     os.makedirs(folder_name, exist_ok=True)
 
 
-
-
-def create_tex_file(tex_content, filename="document.tex_content", base_dir="generated_data"):
+def create_tex_file(
+    tex_content, filename="document.tex_content", base_dir="generated_data"
+):
     """Create a .tex_content file with the given content."""
 
     tex_dir = os.path.join(base_dir, "tex_content")
@@ -56,7 +59,9 @@ def compile_texfile_to_pdf(tex_path, base_dir="generated_data"):
     return pdf_path_final
 
 
-def convert_pdf_to_png(pdf_path, output_png_name="document.png", out_dir="generated_data"):
+def convert_pdf_to_png(
+    pdf_path, output_png_name="document.png", out_dir="generated_data"
+):
 
     create_folder(out_dir)  # Ensure the folder exists
 
@@ -97,17 +102,18 @@ def crop_pdf(pdf_path, output_pdf=None):
     run_command(f"pdfcrop {pdf_path} {output_pdf}")
     return output_pdf
 
+
 def get_tex_template_with_custom_font():
     pass
 
 
 def get_tex_template(
-        content: str,
-        mainfont: str = "Times New Roman",
-        mathsfont: str = "Times New Roman",
-        text_color: str = "black",
-        background_color: str = "white",
-        grid: bool = False
+    content: str,
+    mainfont: str = "Times New Roman",
+    mathsfont: str = "Times New Roman",
+    text_color: str = "black",
+    background_color: str = "white",
+    grid: bool = False,
 ) -> str:
     """
     Generate a LaTeX template with specified font settings, colors, grid, strike functionality, and content using string.Template.
@@ -122,7 +128,8 @@ def get_tex_template(
     """
 
     # LaTeX code for the grid, only added if grid=True
-    grid_code = r"""
+    grid_code = (
+        r"""
     \usepackage{tikz}
     \usepackage{eso-pic}
     \AddToShipoutPictureBG{
@@ -133,7 +140,10 @@ def get_tex_template(
             (current bounding box.north east);
     \end{tikzpicture}
     }
-    """ if grid else ""
+    """
+        if grid
+        else ""
+    )
 
     # LaTeX code for the strike-through functionality
     strike_code = r"""
@@ -295,6 +305,25 @@ def get_tex_template(
     
         """
 
+    irregular_words_code = r"""
+    % Command for irregular word placement
+\newcommand{\irregularword}[1]{% #1: Text
+  \pgfmathsetmacro{\yshift}{(random()-0.5)*3} % Random y-shift between -3pt and 3pt
+  \pgfmathsetmacro{\rotation}{(random()-0.5)*10} % Random rotation between -5° and 5°
+  \tikz[baseline]{
+    \node[inner sep=0pt, outer sep=0pt, anchor=base, yshift=\yshift pt, rotate=\rotation] (text) {\strut #1};
+  }%
+}
+
+\usepackage{xparse}
+\ExplSyntaxOn
+\NewDocumentCommand{\processtext}{+m}{
+  \seq_set_split:Nnn \l_tmpa_seq { ~ } { #1 }
+  \seq_map_inline:Nn \l_tmpa_seq { \irregularword{##1} }
+}
+\ExplSyntaxOff
+    """
+
     # LaTeX preamble template with string placeholders
     template = Template(
         r"""
@@ -308,6 +337,7 @@ $grid_code
 \usetikzlibrary{calc}
 
 $strike_code
+$irregular_words_code
 
 \setmainfont{$mainfont}
 \setmathsfont(Digits,Latin){$mathsfont}
@@ -328,16 +358,17 @@ $content
         text_color=text_color,
         grid_code=grid_code,
         strike_code=strike_code,
-        content=content
+        irregular_words_code=irregular_words_code,
+        content=content,
     )
 
 
 def generate_pdf_from_tex(
-        output_filename: str,
-        tex_files_dir: str = "tex_files",
-        out_dir: str = "output_files",
-        verbose: bool = False,
-        tex_code: str = "None"
+    output_filename: str,
+    tex_files_dir: str = "tex_files",
+    out_dir: str = "output_files",
+    verbose: bool = False,
+    tex_code: str = "None",
 ) -> str:
     """
     Generates a PDF from LaTeX content using xelatex.
@@ -374,14 +405,19 @@ def generate_pdf_from_tex(
         print(f"Compiling LaTeX to PDF for: {tex_filename}...")
         result = subprocess.run(
             f"xelatex -interaction=nonstopmode -output-directory={out_dir} {tex_filename}",
-            shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            shell=True,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
         if verbose:
             print(result.stdout.decode())  # Print LaTeX log output if needed
         print(f"PDF successfully generated: {pdf_filename}")
     except subprocess.CalledProcessError as e:
         if os.path.exists(pdf_filename):
-            print("Warnings occurred during LaTeX compilation, but the PDF was generated.")
+            print(
+                "Warnings occurred during LaTeX compilation, but the PDF was generated."
+            )
             if verbose:
                 print(e.stderr.decode())  # Print warnings
         else:
@@ -397,3 +433,38 @@ def generate_pdf_from_tex(
             os.remove(aux_file)
 
     return pdf_filename  # Return the path to the generated PDF file
+
+def add_noise_and_blur_to_image(path_to_img, noise_level=100, blur_radius=2):
+    print("Adding noise and blur...")
+
+    if not os.path.exists(path_to_img):
+        print("File does not exist.")
+        return
+
+    # Extract directory, base name and extension
+    folder = os.path.dirname(path_to_img)
+    if folder == '':
+        folder = '.'
+    base_name, ext = os.path.splitext(os.path.basename(path_to_img))
+
+    # Open and convert image to RGB
+    img = Image.open(path_to_img).convert("RGB")
+
+    # Create noisy version
+    noise = np.random.randint(-noise_level, noise_level, (img.height, img.width, 3), dtype=np.int16)
+    noisy_img_array = np.clip(np.array(img) + noise, 0, 255).astype(np.uint8)
+    noisy_img = Image.fromarray(noisy_img_array)
+
+    # Save noisy version
+    noisy_file_path = os.path.join(folder, f"{base_name}_noisy{ext}")
+    noisy_img.save(noisy_file_path)
+
+    # Create and save blurred original
+    blurred_img = img.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+    blurred_file_path = os.path.join(folder, f"{base_name}_blurred{ext}")
+    blurred_img.save(blurred_file_path)
+
+    # Create and save blurred noisy version
+    blurred_noisy_img = noisy_img.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+    blurred_noisy_file_path = os.path.join(folder, f"{base_name}_noisy_blurred{ext}")
+    blurred_noisy_img.save(blurred_noisy_file_path)

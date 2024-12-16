@@ -1,5 +1,6 @@
 import openai
 
+
 def clean_answer_format(answer):
     """
     Extracts and returns the content between LaTeX delimiters \begin{document} and \end{document}.
@@ -8,8 +9,8 @@ def clean_answer_format(answer):
     :return: The extracted content if delimiters are present, otherwise the original string.
     """
     # Define the keywords
-    begin_keyword = r'\begin{document}'
-    end_keyword = r'\end{document}'
+    begin_keyword = r"\begin{document}"
+    end_keyword = r"\end{document}"
 
     # Check if the string contains '\begin{document}'
     if begin_keyword in answer:
@@ -25,6 +26,7 @@ def clean_answer_format(answer):
         return content
     else:
         return answer
+
 
 class ModelCommunicator:
     def __init__(self, api_key, base_url="https://fmapi.swissai.cscs.ch"):
