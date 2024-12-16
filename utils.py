@@ -434,6 +434,7 @@ def generate_pdf_from_tex(
 
     return pdf_filename  # Return the path to the generated PDF file
 
+
 def add_noise_and_blur_to_image(path_to_img, noise_level=100, blur_radius=2):
     print("Adding noise and blur...")
 
@@ -443,15 +444,17 @@ def add_noise_and_blur_to_image(path_to_img, noise_level=100, blur_radius=2):
 
     # Extract directory, base name and extension
     folder = os.path.dirname(path_to_img)
-    if folder == '':
-        folder = '.'
+    if folder == "":
+        folder = "."
     base_name, ext = os.path.splitext(os.path.basename(path_to_img))
 
     # Open and convert image to RGB
     img = Image.open(path_to_img).convert("RGB")
 
     # Create noisy version
-    noise = np.random.randint(-noise_level, noise_level, (img.height, img.width, 3), dtype=np.int16)
+    noise = np.random.randint(
+        -noise_level, noise_level, (img.height, img.width, 3), dtype=np.int16
+    )
     noisy_img_array = np.clip(np.array(img) + noise, 0, 255).astype(np.uint8)
     noisy_img = Image.fromarray(noisy_img_array)
 

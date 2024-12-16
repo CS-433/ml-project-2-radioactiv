@@ -3,7 +3,12 @@ import random
 
 from prompts import get_math_exercise_prompt
 
-from utils import get_tex_template, generate_pdf_from_tex, convert_pdf_to_png, add_noise_and_blur_to_image
+from utils import (
+    get_tex_template,
+    generate_pdf_from_tex,
+    convert_pdf_to_png,
+    add_noise_and_blur_to_image,
+)
 from model_communicator import ModelCommunicator
 from dotenv import load_dotenv
 
@@ -92,7 +97,6 @@ def pipeline(k=10, api_key=None, base_dir="example_data", font="Times New Roman"
             )
             with open(path, "w") as f:
                 f.write(response)
-            # TODO: try out with custom font
             tex_code = get_tex_template(
                 response,
                 mainfont=font,
@@ -113,7 +117,9 @@ def pipeline(k=10, api_key=None, base_dir="example_data", font="Times New Roman"
                 output_png_name=f"{filename}.png",
                 out_dir=generated_dir + f"/{i}",
             )
-            add_noise_and_blur_to_image(path_to_img=os.path.join(generated_dir, f"{i}", f"{filename}.png"))
+            add_noise_and_blur_to_image(
+                path_to_img=os.path.join(generated_dir, f"{i}", f"{filename}.png")
+            )
 
 
 if __name__ == "__main__":
