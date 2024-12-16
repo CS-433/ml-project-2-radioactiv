@@ -1,0 +1,172 @@
+\documentclass[varwidth=true, border=10mm]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\newcommand{\simplestrike}[1]{
+    \begin{tikzpicture}[baseline=(text.base)]
+        \node[inner sep=1pt] (text) {#1};
+        \draw[line width=0.6pt] 
+            ($(text.west)+(0mm,0.2mm)$) 
+            .. controls ($(text.west)+(0.5cm,0.5mm)$) and ($(text.center)+(-2mm,0.7mm)$) ..
+            ($(text.center)+(-1mm,-0.2mm)$) 
+            .. controls ($(text.center)+(1mm,0.5mm)$) and ($(text.center)+(3mm,-0.6mm)$) ..
+            ($(text.center)+(2mm,-0.3mm)$) 
+            .. controls ($(text.east)+(-0.5cm,0.4mm)$) and ($(text.east)+(-0.2cm,-0.5mm)$) ..
+            ($(text.east)+(0mm,0.1mm)$);
+    \end{tikzpicture}
+}
+\newcommand{\scribblestrike}[1]{
+    \begin{tikzpicture}[baseline=(text.base)]
+        \node[inner sep=1pt] (text) {#1};        
+        \draw[line width=1pt] 
+            ($(text.west)+(-0.2mm,0.4mm)$) .. controls 
+            ($(text.west)+(1mm,1mm)$) and 
+            ($(text.center)+(-2mm,0mm)$) ..
+            ($(text.center)+(0mm,1mm)$) .. controls
+            ($(text.center)+(2mm,2mm)$) and 
+            ($(text.east)+(-2mm,0.5mm)$) ..
+            ($(text.east)+(0.2mm,1mm)$);
+        \draw[line width=1pt] 
+            ($(text.west)+(0mm,-0.2mm)$) .. controls 
+            ($(text.west)+(1.5mm,-0.5mm)$) and 
+            ($(text.center)+(-1mm,-1mm)$) ..
+            ($(text.center)+(1mm,-0.5mm)$) .. controls
+            ($(text.center)+(3mm,-0.7mm)$) and 
+            ($(text.east)+(-1mm,-0.3mm)$) ..
+            ($(text.east)+(0.5mm,-0.5mm)$);
+        \draw[line width=1pt] 
+            ($(text.west)+(0mm,0mm)$) .. controls 
+            ($(text.west)+(1mm,0.3mm)$) and 
+            ($(text.center)+(-1.5mm,-0.2mm)$) ..
+            ($(text.center)+(0mm,0.2mm)$) .. controls
+            ($(text.center)+(1.5mm,0.4mm)$) and 
+            ($(text.east)+(-1.5mm,0.1mm)$) ..
+            ($(text.east)+(0.5mm,-0.5mm)$);
+    \end{tikzpicture}
+}
+\newcommand{\mistake}[1]{
+    \begin{tikzpicture}[baseline=(text.base)]
+        \node[inner sep=1pt] (text) {#1};
+        \draw[line width=1pt] 
+            ($(text.west)+(-0.2mm,0.4mm)$) .. controls 
+            ($(text.west)+(1mm,1mm)$) and 
+            ($(text.center)+(-2mm,0mm)$) ..
+            ($(text.center)+(0mm,0mm)$) .. controls
+            ($(text.center)+(2mm,-1mm)$) and 
+            ($(text.east)+(-2mm,0.5mm)$) ..
+            ($(text.east)+(0.2mm,1mm)$);
+        \draw[line width=1pt] 
+            ($(text.west)+(0mm,-0.2mm)$) .. controls 
+            ($(text.west)+(1.5mm,-0.5mm)$) and 
+            ($(text.center)+(-1mm,-1mm)$) ..
+            ($(text.center)+(1mm,-0.5mm)$) .. controls
+            ($(text.center)+(3mm,-0.7mm)$) and 
+            ($(text.east)+(-1mm,-0.3mm)$) ..
+            ($(text.east)+(0.5mm,-0.5mm)$);
+        \draw[line width=1pt] 
+            ($(text.west)+(0mm,0mm)$) .. controls 
+            ($(text.west)+(1mm,0.3mm)$) and 
+            ($(text.center)+(-1.5mm,-0.2mm)$) ..
+            ($(text.center)+(0mm,0.2mm)$) .. controls
+            ($(text.center)+(1.5mm,0.4mm)$) and 
+            ($(text.east)+(-1.5mm,0.1mm)$) ..
+            ($(text.east)+(0.5mm,-0.5mm)$);
+    \end{tikzpicture}
+}
+\newcommand{\wigglestrike}[1]{
+    \begin{tikzpicture}[baseline=(text.base)]
+        \node[inner sep=1pt] (text) {#1};
+        \draw[line width=1.2pt, rounded corners=0.5mm]
+            ($(text.west)+(0mm,-0.9mm)$) -- 
+            ($(text.west)+(0.2cm,0.3mm)$) -- 
+            ($(text.west)+(0.4cm,-0.7mm)$) --
+            ($(text.west)+(0.6cm,0.6mm)$) --
+            ($(text.west)+(0.8cm,-0.5mm)$) --
+            ($(text.west)+(1.0cm,0.4mm)$) --
+            ($(text.west)+(1.2cm,-0.6mm)$) --
+            ($(text.west)+(1.4cm,0.5mm)$) --
+            ($(text.east)+(0mm,0.0mm)$);
+    \end{tikzpicture}
+}
+\newcommand{\strikebrush}[1]{
+    \begin{tikzpicture}[baseline=(text.base)]
+        \node[inner sep=1pt] (text) {#1};
+        \draw[line width=0.9pt]
+            ($(text.west)+(0mm,-0.5mm)$) --
+            ($(text.north west)+(0.4cm,-0.8mm)$) --
+            ($(text.west)+(0.2cm,-0.6mm)$) --
+            ($(text.north west)+(0.6cm,-0.8mm)$) --
+            ($(text.west)+(0.4cm,-0.5mm)$) --
+            ($(text.north west)+(0.8cm,-0.7mm)$) --
+            ($(text.west)+(0.6cm,-0.4mm)$) --
+            ($(text.north west)+(1.0cm,-0.8mm)$) --
+            ($(text.west)+(0.8cm,-0.6mm)$) --
+            ($(text.north west)+(1.3cm,-0.7mm)$) --
+            ($(text.west)+(1.0cm,-0.5mm)$) --
+            ($(text.north west)+(1.6cm,-0.8mm)$) --
+            ($(text.west)+(1.2cm,-0.4mm)$) --
+            ($(text.north west)+(1.9cm,-0.7mm)$) --
+            ($(text.west)+(1.4cm,-0.6mm)$) --
+            ($(text.north west)+(2.2cm,-0.8mm)$) --
+            ($(text.west)+(1.8cm,-0.5mm)$) --
+            ($(text.east)+(0cm,+0.4mm)$);
+    \end{tikzpicture}
+}
+\newcommand{\linestrike}[1]{
+    \begin{tikzpicture}[baseline=(text.base)]
+        \node[inner sep=1pt] (text) {#1};
+        \draw[line width=0.5pt]
+            ($(text.west)+(0cm,+0.1mm)$) 
+            .. controls ($(text.west)+(0.2cm,+0.2mm)$) and ($(text.east)+(-0.3cm,+0.1mm)$) ..
+            ($(text.east)+(-0.1cm,0mm)$) --
+            ($(text.east)+(-0.11cm,-0.1mm)$) 
+            .. controls ($(text.west)+(+0.1cm,-0.2mm)$) and ($(text.west)+(+0.15cm,-0.15mm)$) ..
+            ($(text.west)+(+0.12cm,-0.2mm)$) --
+            ($(text.west)+(+0.12cm,-0.4mm)$)
+            .. controls ($(text.east)+(-0.15cm,-0.2mm)$) and ($(text.east)+(-0.1cm,-0.4mm)$) ..
+            ($(text.east)+(-0.05cm,-0.3mm)$) --
+            ($(text.east)+(-0.1cm,-0.5mm)$) 
+            .. controls ($(text.west)+(+0.05cm,-0.6mm)$) and ($(text.west)+(+0.1cm,-0.7mm)$) ..
+            ($(text.west)+(+0cm,-0.6mm)$);
+    \end{tikzpicture}
+}
+\newcommand{\strike}[1]{
+    \begin{tikzpicture}[baseline=(text.base)]
+        \node[inner sep=1pt] (text) {#1};
+        \draw[line width=0.8pt] 
+            ($(text.west)+(0mm,0.1mm)$) .. controls 
+            ($(text.west)+(1.5mm,0.4mm)$) and
+            ($(text.center)+(-3mm,-0.1mm)$) ..
+            ($(text.center)+(-2mm,0.3mm)$) .. controls
+            ($(text.center)+(-1mm,0.1mm)$) and
+            ($(text.center)+(1mm,0.4mm)$) ..
+            ($(text.center)+(2mm,0.2mm)$) .. controls
+            ($(text.center)+(3mm,0.5mm)$) and
+            ($(text.east)+(-2mm,0mm)$) ..
+            ($(text.east)+(0mm,0.2mm)$);
+        \draw[line width=0.8pt] 
+            ($(text.west)+(0.2mm,-0.3mm)$) .. controls 
+            ($(text.west)+(2mm,-0.1mm)$) and
+            ($(text.center)+(-3.5mm,-0.5mm)$) ..
+            ($(text.center)+(-1.5mm,-0.2mm)$) .. controls
+            ($(text.center)+(0mm,-0.4mm)$) and
+            ($(text.center)+(1.5mm,-0.1mm)$) ..
+            ($(text.center)+(2.5mm,-0.3mm)$) .. controls
+            ($(text.center)+(3.5mm,-0.5mm)$) and
+            ($(text.east)+(-1.5mm,-0.2mm)$) ..
+            ($(text.east)+(-0.1mm,-0.3mm)$);
+    \end{tikzpicture}
+}
+
+\begin{document}
+
+\section*{Demonstration of Strikes}
+
+This is a demonstration of different strike-through styles in a single paragraph.  
+Sometimes, \simplestrike{simple strikes} are enough to cross out certain \scribblestrike{words or phrases},  
+but other times you may want a \wigglestrike{wiggly line} for a more dynamic effect.  
+For a bold, artistic touch, the \strikebrush{brush-like style} adds a creative feel.  
+Finally, when \mistake{everything} needs to connect seamlessly, the \linestrike{connected line strike} provides a polished and professional look.
+We don't have a strike command yet, but we \strike{can} create one.
+
+\end{document}
