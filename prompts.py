@@ -26,15 +26,26 @@ def get_math_exercise_prompt(
     else:
         complexity_lv = complexity
 
-    strike_str = ("Since the the Latex Code you produce will be used to train a text detection tool for student solutions, you shouls also incorporate "
-                  "certein text fragments that are striked through. This is to simulate the fact that students might have made mistakes in their solutions. "
-                    "To do this, you can use the following command: \n\n"
-                    "\\strike{This text will be striked through.}\n\n") if strike else ""
+    strike_str = (
+        r'''To simulate student mistakes, incorporate strikethrough text using the following commands:
+                \simplestrike{simple strikes}
+                \scribblestrike{scribbled words or phrases}
+                \wigglestrike{wiggly lines}
+                \strikebrush{brush-like style strikes}
+                \mistake{mistakes}
+                \linestrike{connected line strikes}
+                \strike{general strike}
+                
+                Use these commands intermittently throughout the text to represent errors made by students.
+                '''
+    ) if strike else ""
 
     complexity_str = "The complexity level of the exercise is " + str(complexity_lv)
     " out of 5, where 0 is simple like Kindergarten level and 5 is complex like Theoretical Quantum Physics. PHD level."
 
     return (
+        f"You are an helpful LLM that is part of generating data for a math handwriting recognition model. "
+        f"You are asked to generate math exercises and solutions for our dataset. The output you produced will be converted to handwriting"
         f"Write a math exercise  in {language} with the following requirements:\n\n1. "
         f"Include mathematical expressions and text explanations.\n\n2. {correct_str}\n\n3. "
         f"{complexity_str}\n\n"

@@ -81,7 +81,7 @@ def pipeline(k=10, api_key=None, base_dir="example_data"):
 if __name__ == "__main__":
     load_dotenv()
     api_key = os.getenv("API_KEY")
-    pipeline(api_key=api_key, base_dir="example05")
+    pipeline(api_key=api_key, base_dir="example06")
 
 
 

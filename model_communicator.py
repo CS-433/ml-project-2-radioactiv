@@ -1,5 +1,30 @@
 import openai
 
+def clean_answer_format(answer):
+    """
+    Extracts and returns the content between LaTeX delimiters \begin{document} and \end{document}.
+
+    :param answer: A string that may contain LaTeX delimiters.
+    :return: The extracted content if delimiters are present, otherwise the original string.
+    """
+    # Define the keywords
+    begin_keyword = r'\begin{document}'
+    end_keyword = r'\end{document}'
+
+    # Check if the string contains '\begin{document}'
+    if begin_keyword in answer:
+        # Find the start index after '\begin{document}'
+        start_index = answer.find(begin_keyword) + len(begin_keyword)
+        content = answer[start_index:].strip()
+
+        # If '\end{document}' is present, remove it
+        if end_keyword in content:
+            end_index = content.find(end_keyword)
+            content = content[:end_index].strip()
+
+        return content
+    else:
+        return answer
 
 class ModelCommunicator:
     def __init__(self, api_key, base_url="https://fmapi.swissai.cscs.ch"):
@@ -38,7 +63,9 @@ class ModelCommunicator:
                     answer += chunk.choices[0].delta.content
 
             else:
-                print("answer:")
+                # Clean the answer format
+                answer = clean_answer_format(answer)
+                print("cleaned answer:")
                 print(answer)
                 return answer
         except openai.OpenAIError as e:

@@ -12,6 +12,8 @@ def create_folder(folder_name):
     os.makedirs(folder_name, exist_ok=True)
 
 
+
+
 def create_tex_file(tex_content, filename="document.tex_content", base_dir="generated_data"):
     """Create a .tex_content file with the given content."""
 
@@ -131,6 +133,134 @@ def get_tex_template(
 
     # LaTeX code for the strike-through functionality
     strike_code = r"""
+    \newcommand{\simplestrike}[1]{
+        \begin{tikzpicture}[baseline=(text.base)]
+            \node[inner sep=1pt] (text) {#1};
+            \draw[line width=0.6pt] 
+                ($(text.west)+(0mm,0.2mm)$) 
+                .. controls ($(text.west)+(0.5cm,0.5mm)$) and ($(text.center)+(-2mm,0.7mm)$) ..
+                ($(text.center)+(-1mm,-0.2mm)$) 
+                .. controls ($(text.center)+(1mm,0.5mm)$) and ($(text.center)+(3mm,-0.6mm)$) ..
+                ($(text.center)+(2mm,-0.3mm)$) 
+                .. controls ($(text.east)+(-0.5cm,0.4mm)$) and ($(text.east)+(-0.2cm,-0.5mm)$) ..
+                ($(text.east)+(0mm,0.1mm)$);
+        \end{tikzpicture}
+    }
+    \newcommand{\scribblestrike}[1]{
+        \begin{tikzpicture}[baseline=(text.base)]
+            \node[inner sep=1pt] (text) {#1};        
+            \draw[line width=1pt] 
+                ($(text.west)+(-0.2mm,0.4mm)$) .. controls 
+                ($(text.west)+(1mm,1mm)$) and 
+                ($(text.center)+(-2mm,0mm)$) ..
+                ($(text.center)+(0mm,1mm)$) .. controls
+                ($(text.center)+(2mm,2mm)$) and 
+                ($(text.east)+(-2mm,0.5mm)$) ..
+                ($(text.east)+(0.2mm,1mm)$);
+            \draw[line width=1pt] 
+                ($(text.west)+(0mm,-0.2mm)$) .. controls 
+                ($(text.west)+(1.5mm,-0.5mm)$) and 
+                ($(text.center)+(-1mm,-1mm)$) ..
+                ($(text.center)+(1mm,-0.5mm)$) .. controls
+                ($(text.center)+(3mm,-0.7mm)$) and 
+                ($(text.east)+(-1mm,-0.3mm)$) ..
+                ($(text.east)+(0.5mm,-0.5mm)$);
+            \draw[line width=1pt] 
+                ($(text.west)+(0mm,0mm)$) .. controls 
+                ($(text.west)+(1mm,0.3mm)$) and 
+                ($(text.center)+(-1.5mm,-0.2mm)$) ..
+                ($(text.center)+(0mm,0.2mm)$) .. controls
+                ($(text.center)+(1.5mm,0.4mm)$) and 
+                ($(text.east)+(-1.5mm,0.1mm)$) ..
+                ($(text.east)+(0.5mm,-0.5mm)$);
+        \end{tikzpicture}
+    }
+    \newcommand{\mistake}[1]{
+        \begin{tikzpicture}[baseline=(text.base)]
+            \node[inner sep=1pt] (text) {#1};
+            \draw[line width=1pt] 
+                ($(text.west)+(-0.2mm,0.4mm)$) .. controls 
+                ($(text.west)+(1mm,1mm)$) and 
+                ($(text.center)+(-2mm,0mm)$) ..
+                ($(text.center)+(0mm,0mm)$) .. controls
+                ($(text.center)+(2mm,-1mm)$) and 
+                ($(text.east)+(-2mm,0.5mm)$) ..
+                ($(text.east)+(0.2mm,1mm)$);
+            \draw[line width=1pt] 
+                ($(text.west)+(0mm,-0.2mm)$) .. controls 
+                ($(text.west)+(1.5mm,-0.5mm)$) and 
+                ($(text.center)+(-1mm,-1mm)$) ..
+                ($(text.center)+(1mm,-0.5mm)$) .. controls
+                ($(text.center)+(3mm,-0.7mm)$) and 
+                ($(text.east)+(-1mm,-0.3mm)$) ..
+                ($(text.east)+(0.5mm,-0.5mm)$);
+            \draw[line width=1pt] 
+                ($(text.west)+(0mm,0mm)$) .. controls 
+                ($(text.west)+(1mm,0.3mm)$) and 
+                ($(text.center)+(-1.5mm,-0.2mm)$) ..
+                ($(text.center)+(0mm,0.2mm)$) .. controls
+                ($(text.center)+(1.5mm,0.4mm)$) and 
+                ($(text.east)+(-1.5mm,0.1mm)$) ..
+                ($(text.east)+(0.5mm,-0.5mm)$);
+        \end{tikzpicture}
+    }
+    \newcommand{\wigglestrike}[1]{
+        \begin{tikzpicture}[baseline=(text.base)]
+            \node[inner sep=1pt] (text) {#1};
+            \draw[line width=1.2pt, rounded corners=0.5mm]
+                ($(text.west)+(0mm,-0.9mm)$) -- 
+                ($(text.west)+(0.2cm,0.3mm)$) -- 
+                ($(text.west)+(0.4cm,-0.7mm)$) --
+                ($(text.west)+(0.6cm,0.6mm)$) --
+                ($(text.west)+(0.8cm,-0.5mm)$) --
+                ($(text.west)+(1.0cm,0.4mm)$) --
+                ($(text.west)+(1.2cm,-0.6mm)$) --
+                ($(text.west)+(1.4cm,0.5mm)$) --
+                ($(text.east)+(0mm,0.0mm)$);
+        \end{tikzpicture}
+    }
+    \newcommand{\strikebrush}[1]{
+        \begin{tikzpicture}[baseline=(text.base)]
+            \node[inner sep=1pt] (text) {#1};
+            \draw[line width=0.9pt]
+                ($(text.west)+(0mm,-0.5mm)$) --
+                ($(text.north west)+(0.4cm,-0.8mm)$) --
+                ($(text.west)+(0.2cm,-0.6mm)$) --
+                ($(text.north west)+(0.6cm,-0.8mm)$) --
+                ($(text.west)+(0.4cm,-0.5mm)$) --
+                ($(text.north west)+(0.8cm,-0.7mm)$) --
+                ($(text.west)+(0.6cm,-0.4mm)$) --
+                ($(text.north west)+(1.0cm,-0.8mm)$) --
+                ($(text.west)+(0.8cm,-0.6mm)$) --
+                ($(text.north west)+(1.3cm,-0.7mm)$) --
+                ($(text.west)+(1.0cm,-0.5mm)$) --
+                ($(text.north west)+(1.6cm,-0.8mm)$) --
+                ($(text.west)+(1.2cm,-0.4mm)$) --
+                ($(text.north west)+(1.9cm,-0.7mm)$) --
+                ($(text.west)+(1.4cm,-0.6mm)$) --
+                ($(text.north west)+(2.2cm,-0.8mm)$) --
+                ($(text.west)+(1.8cm,-0.5mm)$) --
+                ($(text.east)+(0cm,+0.4mm)$);
+        \end{tikzpicture}
+    }
+    \newcommand{\linestrike}[1]{
+        \begin{tikzpicture}[baseline=(text.base)]
+            \node[inner sep=1pt] (text) {#1};
+            \draw[line width=0.5pt]
+                ($(text.west)+(0cm,+0.1mm)$) 
+                .. controls ($(text.west)+(0.2cm,+0.2mm)$) and ($(text.east)+(-0.3cm,+0.1mm)$) ..
+                ($(text.east)+(-0.1cm,0mm)$) --
+                ($(text.east)+(-0.11cm,-0.1mm)$) 
+                .. controls ($(text.west)+(+0.1cm,-0.2mm)$) and ($(text.west)+(+0.15cm,-0.15mm)$) ..
+                ($(text.west)+(+0.12cm,-0.2mm)$) --
+                ($(text.west)+(+0.12cm,-0.4mm)$)
+                .. controls ($(text.east)+(-0.15cm,-0.2mm)$) and ($(text.east)+(-0.1cm,-0.4mm)$) ..
+                ($(text.east)+(-0.05cm,-0.3mm)$) --
+                ($(text.east)+(-0.1cm,-0.5mm)$) 
+                .. controls ($(text.west)+(+0.05cm,-0.6mm)$) and ($(text.west)+(+0.1cm,-0.7mm)$) ..
+                ($(text.west)+(+0cm,-0.6mm)$);
+        \end{tikzpicture}
+    }
     \newcommand{\strike}[1]{
         \begin{tikzpicture}[baseline=(text.base)]
             \node[inner sep=1pt] (text) {#1};
@@ -158,7 +288,8 @@ def get_tex_template(
                 ($(text.east)+(-0.1mm,-0.3mm)$);
         \end{tikzpicture}
     }
-    """
+    
+        """
 
     # LaTeX preamble template with string placeholders
     template = Template(
