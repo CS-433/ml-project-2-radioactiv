@@ -17,14 +17,12 @@ if __name__ == "__main__":
     generator = LatexGenerator(api_key, iterations=2)
     generator.generate_latex()
 
-    fonts = ["JaneAusten"]
+    fonts = ["JaneAusten", "ML4Science"]
     pagecolors = ["white"]
     textcolors = ["black"]
     add_mistakes("generated_data/tex")
-
     headers = create_headers(fonts, pagecolors, textcolors)
-
     add_headers("generated_data/tex", headers)
     convert_tex_to_pdf("generated_data/tex")
     convert_pdf_to_pngs("generated_data/pdf")
-    # transform_handwriting("generated_data/pdf")
+    add_noise_and_blur()
