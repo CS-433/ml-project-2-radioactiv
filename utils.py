@@ -58,7 +58,7 @@ def compile_texfile_to_pdf(tex_path, base_dir="generated_data"):
 
 def convert_pdf_to_png(pdf_path, output_png_name="document.png", out_dir="generated_data"):
 
-    create_folder(dir)  # Ensure the folder exists
+    create_folder(out_dir)  # Ensure the folder exists
 
     # if output does not have png extension, add it
     if not output_png_name.endswith(".png"):
@@ -66,7 +66,11 @@ def convert_pdf_to_png(pdf_path, output_png_name="document.png", out_dir="genera
 
     output_path = os.path.join(out_dir, output_png_name)
     print("Converting PDF to PNG...")
-    run_command(f"pdftoppm {pdf_path} -png -singlefile {output_path[:-4]}")
+    try:
+        run_command(f"pdftoppm {pdf_path} -png -singlefile {output_path[:-4]}")
+    except Exception as e:
+        print(f"Error converting PDF to PNG: {e}")
+        return None
     return output_path
 
 
