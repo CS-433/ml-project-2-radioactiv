@@ -1,0 +1,40 @@
+\documentclass[varwidth=true, border=10mm]{standalone}
+\usepackage{fontspec}
+\setmainfont[Scale=2.0]{ML4Science}  % Increased Font Size
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+% Command for irregular word placement
+\newcommand{\irregularword}[1]{% #1: Text
+  \pgfmathsetmacro{\yshift}{(random()-0.5)*3} % Random y-shift between -3pt and 3pt
+  \pgfmathsetmacro{\rotation}{(random()-0.5)*10} % Random rotation between -5° and 5°
+  \tikz[baseline]{
+    \node[inner sep=0pt, outer sep=0pt, anchor=base, yshift=\yshift pt, rotate=\rotation] (text) {\strut #1};
+  }%
+}
+
+\usepackage{xparse}
+\ExplSyntaxOn
+\NewDocumentCommand{\processtext}{+m}{
+  \seq_set_split:Nnn \l_tmpa_seq { ~ } { #1 }
+  \seq_map_inline:Nn \l_tmpa_seq { \irregularword{##1} }
+}
+\ExplSyntaxOff
+
+\begin{document}
+
+\section*{Demonstration of Strikes}
+
+\processtext{
+This is a demonstration of different strike-through styles in a single paragraph.
+Sometimes, simple strikes are enough to cross out certain words or phrases,
+but other times you may want a wiggly line for a more dynamic effect.
+For a bold, artistic touch, the brush-like style adds a creative feel.
+Finally, when everything needs to connect seamlessly, the connected line strike provides a polished and professional look.
+We do not have a strike command yet, but we can create one.
+52562 46152 + 4 = 0
+}
+
+
+\end{document}
