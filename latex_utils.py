@@ -1,5 +1,7 @@
 import os
 from os_utils import run_command, check_file_exists
+from PIL import Image, ImageFilter
+import numpy as np
 import random
 import re
 
@@ -42,7 +44,7 @@ def compile_tex_to_pdf(tex_path):
     os.rename(pdf_path_temp, pdf_path_final)
     return pdf_path_final
 
-def convert_pdf_to_png(pdf_path):
+def convert_pdf_to_png(pdf_path, dpi=500):
     """Convert a PDF to PNG format and store the PNG in the 'png' subfolder."""
     base_dir = "generated_data"
     png_dir = os.path.join(base_dir, "png")
@@ -53,7 +55,7 @@ def convert_pdf_to_png(pdf_path):
     output_path = os.path.join(png_dir, png_filename)
 
     # Convert the PDF to PNG using pdftoppm
-    run_command(f"pdftoppm {pdf_path} -png -singlefile {output_path[:-4]}")
+    run_command(f"pdftoppm -r {dpi} {pdf_path} -png -singlefile {output_path[:-4]}")
 
     return output_path
 
@@ -240,3 +242,38 @@ def create_headers(fonts, pagecolors, textcolors):
 """ % (font, font, pagecolor, textcolor, grid)
                     headers.append(header)
     return headers
+
+def add_noise_and_blur(folder="generated_data/png", noise_level=100, blur_radius=2):
+    print("Adding noise and blur...")
+    if not os.path.exists(folder):
+        return
+    
+    png_files = [f for f in os.listdir(folder) if f.endswith(".png")]
+    if not png_files:
+        return
+
+    for png_file in png_files:
+        file_path = os.path.join(folder, png_file)
+        base_name, ext = os.path.splitext(png_file)
+        
+        # Open and convert image to RGB
+        img = Image.open(file_path).convert("RGB")
+        
+        # Create noisy version
+        noise = np.random.randint(-noise_level, noise_level, (img.height, img.width, 3), dtype=np.int16)
+        noisy_img = np.clip(np.array(img) + noise, 0, 255).astype(np.uint8)
+        noisy_img = Image.fromarray(noisy_img)
+        
+        # Save noisy version
+        noisy_file_path = os.path.join(folder, f"{base_name}_noisy{ext}")
+        noisy_img.save(noisy_file_path)
+        
+        # Create and save blurred original
+        blurred_img = img.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+        blurred_file_path = os.path.join(folder, f"{base_name}_blurred{ext}")
+        blurred_img.save(blurred_file_path)
+        
+        # Create and save blurred noisy version
+        blurred_noisy_img = noisy_img.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+        blurred_noisy_file_path = os.path.join(folder, f"{base_name}_noisy_blurred{ext}")
+        blurred_noisy_img.save(blurred_noisy_file_path)
