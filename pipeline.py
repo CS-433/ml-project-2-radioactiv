@@ -22,6 +22,14 @@ model_base_url = "https://fmapi.swissai.cscs.ch"
 
 
 def pipeline(k=10, api_key=None, base_dir="example_data", font="Times New Roman"):
+    """
+    Generate a series of math exercises and corresponding PDFs. The exercises are generated with random parameters.
+    :param k:   Number of exercises to generate
+    :param api_key:     API key for the model
+    :param base_dir:    Base directory for the generated files
+    :param font:    Font to use in the LaTeX document
+    :return:    None
+    """
     model_communicator = ModelCommunicator(api_key=api_key, base_url=model_base_url)
 
     # create directories
