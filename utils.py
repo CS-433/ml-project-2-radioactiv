@@ -54,12 +54,15 @@ def compile_texfile_to_pdf(tex_path, base_dir="generated_data"):
     return pdf_path_final
 
 
-def convert_pdf_to_png(pdf_path, output_png="document.png", base_dir="generated_data"):
-    """Convert a PDF to PNG format and store the PNG in the 'png' subfolder."""
-    png_dir = os.path.join(base_dir, "png")
-    create_folder(png_dir)  # Ensure the folder exists
+def convert_pdf_to_png(pdf_path, output_png_name="document.png", out_dir="generated_data"):
 
-    output_path = os.path.join(png_dir, output_png)
+    create_folder(dir)  # Ensure the folder exists
+
+    # if output does not have png extension, add it
+    if not output_png_name.endswith(".png"):
+        output_png_name += ".png"
+
+    output_path = os.path.join(out_dir, output_png_name)
     print("Converting PDF to PNG...")
     run_command(f"pdftoppm {pdf_path} -png -singlefile {output_path[:-4]}")
     return output_path
@@ -87,6 +90,9 @@ def crop_pdf(pdf_path, output_pdf=None):
     print("Cropping the PDF...")
     run_command(f"pdfcrop {pdf_path} {output_pdf}")
     return output_pdf
+
+def get_tex_template_with_custom_font():
+    pass
 
 
 def get_tex_template(

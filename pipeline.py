@@ -3,7 +3,7 @@ import random
 
 from prompts import get_math_exercise_prompt
 
-from utils import get_tex_template, generate_pdf_from_tex
+from utils import get_tex_template, generate_pdf_from_tex, convert_pdf_to_png
 from model_communicator import ModelCommunicator
 from dotenv import load_dotenv
 
@@ -72,14 +72,16 @@ def pipeline(k=10, api_key=None, base_dir="example_data"):
             filename = f"exercise_{lang}_{num}_{flag}_{text_color}_{background_color}_{'grid' if hasGrids else ''}_{'strike' if hasStrikes else ''}"
             with open(path, "w") as f:
                 f.write(response)
-            tex_code = get_tex_template(response, text_color=text_color, background_color=background_color, grid=hasGrid)
+            #TODO: try out with custom font
+            tex_code = get_tex_template(response, mainfont='Times New Roman', mathsfont='Times New Roman', text_color=text_color, background_color=background_color, grid=hasGrid)
             generate_pdf_from_tex(filename, tex_files_dir + f"/{i}", out_dir=generated_dir + f"/{i}", verbose=True, tex_code=tex_code)
+            #convert_pdf_to_png(generated_dir + f"/{i}/{filename}.pdf", f"{filename}.png", generated_dir + f"/{i}")
 
 
 if __name__ == "__main__":
     load_dotenv()
     api_key = os.getenv("API_KEY")
-    pipeline(api_key=api_key, base_dir="example03")
+    pipeline(api_key=api_key, base_dir="example05")
 
 
 
