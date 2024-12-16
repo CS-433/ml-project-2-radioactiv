@@ -29,7 +29,7 @@ def get_math_exercise_prompt(
     strike_str = ("Since the the Latex Code you produce will be used to train a text detection tool for student solutions, you shouls also incorporate "
                   "certein text fragments that are striked through. This is to simulate the fact that students might have made mistakes in their solutions. "
                     "To do this, you can use the following command: \n\n"
-                    "\strike{This text will be striked through.}\n\n") if strike else ""
+                    "\\strike{This text will be striked through.}\n\n") if strike else ""
 
     complexity_str = "The complexity level of the exercise is " + str(complexity_lv)
     " out of 5, where 0 is simple like Kindergarten level and 5 is complex like Theoretical Quantum Physics. PHD level."

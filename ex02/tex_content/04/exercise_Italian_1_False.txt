@@ -1,0 +1,19 @@
+Esercizio 1:
+
+Risolvere l'espressione:
+
+$\frac{2 + 3}{5} = ?$
+
+Soluzione:
+
+\strike{Sommiamo 2 e 3 e otteniamo 5.}
+
+Quindi,
+
+$\frac{2 + 3}{5} = \frac{5}{5} = 2$
+
+\strike{No, aspetta! Mi sono sbagliato!}
+
+$\frac{2 + 3}{5} = 1$
+
+\strike{Sì, sono sicuro!}

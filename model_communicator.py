@@ -34,12 +34,12 @@ class ModelCommunicator:
             print("Response:")
             print(response)
             for chunk in response:
-                if "choices" in chunk and chunk["choices"][0].get("delta", {}).get(
-                    "content"
-                ):
-                    answer += chunk["choices"][0]["delta"]["content"]
+                if len(chunk.choices) > 0 and chunk.choices[0].delta.content:
+                    answer += chunk.choices[0].delta.content
 
             else:
+                print("answer:")
+                print(answer)
                 return answer
         except openai.OpenAIError as e:
             print(f"OpenAI API Error: {str(e)}")

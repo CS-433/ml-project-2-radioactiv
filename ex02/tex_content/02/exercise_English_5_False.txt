@@ -1,0 +1,27 @@
+**Math Exercise:**
+
+Solve for x in the equation: 2(x + 5) = 11 + 3x
+
+**Step 1:** Expand the left side of the equation using the distributive property.
+
+2(x + 5) = 2x + 10
+
+So, the equation becomes: 2x + 10 = 11 + 3x
+
+**Step 2:** Add 2 to both sides of the equation to isolate the term with x.
+
+2x + 10 + 2 = 11 + 3x + 2
+
+This simplifies to: 2x + 12 = 13 + 3x
+
+**Step 3:** Subtract 2x from both sides to get all the x terms on one side.
+
+12 = 13 + x
+
+**Step 4:** Subtract 13 from both sides to solve for x.
+
+-1 = x
+
+**Solution:** x = -1
+
+Note: The mistake in this solution is in Step 2, where 2 is added to both sides instead of subtracting 3x from both sides to isolate the term with x.

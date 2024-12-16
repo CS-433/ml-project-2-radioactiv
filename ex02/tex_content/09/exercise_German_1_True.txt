@@ -1,0 +1,34 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+\begin{document}
+
+\section{Mathematische Übung}
+
+Löse die folgende Gleichung:
+
+$$2x + 5 = 11$$
+
+Löse die Gleichung für $x$.
+
+\subsection{Lösung}
+
+\strike{Zuerst subtrahieren wir 3 von beiden Seiten.}
+
+Zuerst subtrahieren wir 5 von beiden Seiten:
+
+$$2x = 11 - 5$$
+
+$$2x = 6$$
+
+Dann dividieren wir beide Seiten durch 2:
+
+$$x = \frac{6}{2}$$
+
+$$x = 3$$
+
+Die endgültige Antwort ist 3.
+
+\strike{Die endgültige Antwort ist 4.}
+
+\end{document}

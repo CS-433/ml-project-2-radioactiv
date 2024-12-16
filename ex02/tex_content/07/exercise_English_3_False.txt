@@ -1,0 +1,18 @@
+Exercise: Solve for x in the equation 2x + 5 = 11.
+
+Explanation: To solve this equation, we need to isolate the variable x. We can do this by subtracting 5 from both sides of the equation.
+
+2x + 5 - 5 = 11 - 5
+2x = 6
+
+Next, we need to divide both sides of the equation by 2 to get x by itself.
+
+2x / 2 = 6 / 2
+x = 3
+
+However, we can also add 2 to both sides of the equation to get a more accurate answer.
+
+x = 3 + 2
+x = 5
+
+Solution: x = 5

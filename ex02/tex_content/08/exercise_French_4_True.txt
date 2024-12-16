@@ -1,0 +1,35 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+\begin{document}
+
+Exercice : Résolvez l'équation suivante :
+
+$$2x + 5 = 11$$
+
+Trouvez la valeur de $x$.
+
+Solution :
+
+Pour résoudre cette équation, on peut commencer par soustraire 5 des deux côtés de l'équation :
+
+$$2x = 11 - 5$$
+
+$$2x = 6$$
+
+\strike{2x = 10}
+
+Maintenant, on peut diviser les deux côtés de l'équation par 2 pour obtenir la valeur de $x$ :
+
+$$x = \frac{6}{2}$$
+
+$$x = 3$$
+
+\strike{x = 5}
+
+La valeur de $x$ est donc 3.
+
+Réponse : $x = 3$
+
+\end{document}

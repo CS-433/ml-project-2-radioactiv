@@ -1,0 +1,65 @@
+
+\documentclass[varwidth=true, border=10mm]{standalone}
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{mathspec}
+\usepackage{xcolor} 
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+
+    \newcommand{\strike}[1]{
+        \begin{tikzpicture}[baseline=(text.base)]
+            \node[inner sep=1pt] (text) {#1};
+            \draw[line width=0.8pt] 
+                ($(text.west)+(0mm,0.1mm)$) .. controls 
+                ($(text.west)+(1.5mm,0.4mm)$) and
+                ($(text.center)+(-3mm,-0.1mm)$) ..
+                ($(text.center)+(-2mm,0.3mm)$) .. controls
+                ($(text.center)+(-1mm,0.1mm)$) and
+                ($(text.center)+(1mm,0.4mm)$) ..
+                ($(text.center)+(2mm,0.2mm)$) .. controls
+                ($(text.center)+(3mm,0.5mm)$) and
+                ($(text.east)+(-2mm,0mm)$) ..
+                ($(text.east)+(0mm,0.2mm)$);
+            \draw[line width=0.8pt] 
+                ($(text.west)+(0.2mm,-0.3mm)$) .. controls 
+                ($(text.west)+(2mm,-0.1mm)$) and
+                ($(text.center)+(-3.5mm,-0.5mm)$) ..
+                ($(text.center)+(-1.5mm,-0.2mm)$) .. controls
+                ($(text.center)+(0mm,-0.4mm)$) and
+                ($(text.center)+(1.5mm,-0.1mm)$) ..
+                ($(text.center)+(2.5mm,-0.3mm)$) .. controls
+                ($(text.center)+(3.5mm,-0.5mm)$) and
+                ($(text.east)+(-1.5mm,-0.2mm)$) ..
+                ($(text.east)+(-0.1mm,-0.3mm)$);
+        \end{tikzpicture}
+    }
+    
+
+\setmainfont{Times New Roman}
+\setmathsfont(Digits,Latin){Times New Roman}
+\pagecolor{gray}
+\color{green}
+
+\begin{document}
+Exercice de mathématiques :
+
+Un magasin de jouets a reçu un nouveau stock de peluches. Le magasinier a décidé de les ranger sur des étagères. Chaque étagère peut contenir 5 rangées de peluches, et chaque rangée peut contenir 8 peluches. Si le magasinier dispose de 15 étagères, combien de peluches peut-il ranger au total ?
+
+Calcul :
+
+15 étagères × 5 rangées/étagère = 75 rangées
+75 rangées × 8 peluches/rangée = 600 peluches
+
+Mais attendez ! Le magasinier a oublié que certaines étagères ont déjà des peluches dessus. Il y a déjà 120 peluches réparties sur 4 étagères. Il faut donc soustraire ce nombre du total :
+
+600 peluches - 120 peluches = 480 peluches
+
+Et comme le magasinier est très fatigué, il a fait une petite erreur de calcul... Il a multiplié le nombre de peluches par 2 au lieu de les additionner :
+
+480 peluches × 2 = 960 peluches
+
+Donc, selon le magasinier, il peut ranger... 960 peluches !
+\end{document}

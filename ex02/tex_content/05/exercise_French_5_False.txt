@@ -1,0 +1,18 @@
+Exercice de mathématiques :
+
+Un magasin de jouets a reçu un nouveau stock de peluches. Le magasinier a décidé de les ranger sur des étagères. Chaque étagère peut contenir 5 rangées de peluches, et chaque rangée peut contenir 8 peluches. Si le magasinier dispose de 15 étagères, combien de peluches peut-il ranger au total ?
+
+Calcul :
+
+15 étagères × 5 rangées/étagère = 75 rangées
+75 rangées × 8 peluches/rangée = 600 peluches
+
+Mais attendez ! Le magasinier a oublié que certaines étagères ont déjà des peluches dessus. Il y a déjà 120 peluches réparties sur 4 étagères. Il faut donc soustraire ce nombre du total :
+
+600 peluches - 120 peluches = 480 peluches
+
+Et comme le magasinier est très fatigué, il a fait une petite erreur de calcul... Il a multiplié le nombre de peluches par 2 au lieu de les additionner :
+
+480 peluches × 2 = 960 peluches
+
+Donc, selon le magasinier, il peut ranger... 960 peluches !

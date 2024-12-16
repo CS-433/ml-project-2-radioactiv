@@ -40,6 +40,9 @@ def pipeline(k=10, api_key=None, base_dir="example_data"):
     # Zip them together
     sequence = zip(languages, numbers, booleans, text_colors, background_colors, hasGrids, hasStrikes)
 
+    #TODO: make sure we dont get the same background and text color
+
+
     # Iterate over the sequence
     for i, (lang, num, flag, text_color, background_color, hasGrid, hasStrike) in enumerate(sequence):
         print(f"Generating PDF {i+1}/{k}...")

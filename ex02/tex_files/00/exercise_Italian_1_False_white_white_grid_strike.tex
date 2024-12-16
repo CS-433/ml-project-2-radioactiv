@@ -1,0 +1,68 @@
+
+\documentclass[varwidth=true, border=10mm]{standalone}
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{mathspec}
+\usepackage{xcolor} 
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+
+    \newcommand{\strike}[1]{
+        \begin{tikzpicture}[baseline=(text.base)]
+            \node[inner sep=1pt] (text) {#1};
+            \draw[line width=0.8pt] 
+                ($(text.west)+(0mm,0.1mm)$) .. controls 
+                ($(text.west)+(1.5mm,0.4mm)$) and
+                ($(text.center)+(-3mm,-0.1mm)$) ..
+                ($(text.center)+(-2mm,0.3mm)$) .. controls
+                ($(text.center)+(-1mm,0.1mm)$) and
+                ($(text.center)+(1mm,0.4mm)$) ..
+                ($(text.center)+(2mm,0.2mm)$) .. controls
+                ($(text.center)+(3mm,0.5mm)$) and
+                ($(text.east)+(-2mm,0mm)$) ..
+                ($(text.east)+(0mm,0.2mm)$);
+            \draw[line width=0.8pt] 
+                ($(text.west)+(0.2mm,-0.3mm)$) .. controls 
+                ($(text.west)+(2mm,-0.1mm)$) and
+                ($(text.center)+(-3.5mm,-0.5mm)$) ..
+                ($(text.center)+(-1.5mm,-0.2mm)$) .. controls
+                ($(text.center)+(0mm,-0.4mm)$) and
+                ($(text.center)+(1.5mm,-0.1mm)$) ..
+                ($(text.center)+(2.5mm,-0.3mm)$) .. controls
+                ($(text.center)+(3.5mm,-0.5mm)$) and
+                ($(text.east)+(-1.5mm,-0.2mm)$) ..
+                ($(text.east)+(-0.1mm,-0.3mm)$);
+        \end{tikzpicture}
+    }
+    
+
+\setmainfont{Times New Roman}
+\setmathsfont(Digits,Latin){Times New Roman}
+\pagecolor{white}
+\color{white}
+
+\begin{document}
+Esercizio di matematica:
+
+Un libro costa € 15,00. Se si acquistano 3 libri, quanti soldi si spendono in totale?
+
+Soluzione:
+
+Il prezzo di un libro è € \strike{20},00. Se si acquistano 3 libri, il prezzo totale è:
+
+3 × € 15,00 = € \strike{45},00
+
+No, aspetta! Il prezzo di un libro è € 15,00, non € 20,00. Quindi:
+
+3 × € 15,00 = € 50,00
+
+No, sbaglio! Devo calcolare:
+
+3 × € 15,00 = € 46,00
+
+Sì, è giusto!
+
+Risposta: € 46,00
+\end{document}

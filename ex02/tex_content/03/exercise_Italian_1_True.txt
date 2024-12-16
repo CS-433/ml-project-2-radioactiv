@@ -1,0 +1,19 @@
+\textbf{Esercizio 1}
+
+Risolvere l'espressione:
+
+$$\frac{2}{3} + \frac{1}{4} =$$
+
+\textit{Soluzione:}
+
+Per risolvere questa espressione, dobbiamo trovare un denominatore comune per le due frazioni. Il denominatore comune è 12.
+
+$$\frac{2}{3} + \frac{1}{4} = \frac{8}{12} + \frac{3}{12} = \frac{11}{12}$$
+
+\strike{La risposta è 1}
+
+\textit{Nota:} Ricordati di semplificare le frazioni, se possibile.
+
+\textbf{Risposta corretta:} $\boxed{\frac{11}{12}}$
+
+\strike{La risposta è $\frac{3}{4}$}
