@@ -7,11 +7,19 @@ from utils import get_tex_template, generate_pdf_from_tex
 from model_communicator import ModelCommunicator
 from dotenv import load_dotenv
 
+possible_languages = ["English", "French", "German", "Italian"]
+possible_difficulties = [1, 2, 3, 4, 5]
+possible_text_colors = ["red", "blue", "green", "yellow", 'black', 'white']
+possible_background_colors = ["white", "black", "gray"]
+
+model_base_url = "https://fmapi.swissai.cscs.ch"
+
 
 def pipeline(k=10, api_key=None, base_dir="example_data"):
     model_communicator = ModelCommunicator(
-        api_key=api_key, base_url="https://fmapi.swissai.cscs.ch"
+        api_key=api_key, base_url=model_base_url
     )
+
     # create directories
     if not os.path.exists(base_dir):
         os.makedirs(base_dir)
@@ -29,19 +37,21 @@ def pipeline(k=10, api_key=None, base_dir="example_data"):
     # generate data
     # create a sequence of strings "english, french, german, italian" and other random parameters
     # this can later be done systematically
-    languages = random.choices(["English", "French", "German", "Italian"], k=k)
-    numbers = random.choices([1, 2, 3, 4, 5], k=k)
+    languages = random.choices(possible_languages, k=k)
+    numbers = random.choices(possible_difficulties, k=k)
     booleans = random.choices([True, False], k=k)
-    text_colors = random.choices(["red", "blue", "green", "yellow", 'black', 'white'], k=k)
-    background_colors = random.choices(["white", "black", "gray"], k=k)
+    text_colors = random.choices(possible_text_colors, k=k)
+    background_colors = random.choices(possible_background_colors, k=k)
     hasGrids = random.choices([True, False], k=k)
     hasStrikes = random.choices([True, False], k=k)
 
+    # make sure we dont have the same text and background color
+    for i in range(k):
+        if text_colors[i] == background_colors[i]:
+            new_possible_text_colors = [color for color in possible_text_colors if color != text_colors[i]]
+            text_colors[i] = random.choice(new_possible_text_colors)
     # Zip them together
     sequence = zip(languages, numbers, booleans, text_colors, background_colors, hasGrids, hasStrikes)
-
-    #TODO: make sure we dont get the same background and text color
-
 
     # Iterate over the sequence
     for i, (lang, num, flag, text_color, background_color, hasGrid, hasStrike) in enumerate(sequence):
@@ -69,7 +79,7 @@ def pipeline(k=10, api_key=None, base_dir="example_data"):
 if __name__ == "__main__":
     load_dotenv()
     api_key = os.getenv("API_KEY")
-    pipeline(api_key=api_key, base_dir="ex02")
+    pipeline(api_key=api_key, base_dir="example03")
 
 
 
