@@ -1,16 +1,10 @@
 import openai
 import os
 from dotenv import load_dotenv
-
+import random
 
 class LatexGenerator:
-    def __init__(
-        self,
-        api_key,
-        base_url="https://fmapi.swissai.cscs.ch",
-        font="JaneAusten",
-        iterations=5,
-    ):
+    def __init__(self, api_key, languages=["English"], base_url="https://fmapi.swissai.cscs.ch", iterations=5):
         """
         Initializes the LatexGenerator instance.
 
@@ -20,25 +14,13 @@ class LatexGenerator:
         :param iterations: Number of solutions to generate
         """
         self.client = openai.Client(api_key=api_key, base_url=base_url)
-        self.font = font
         self.iterations = iterations
-        self.header_template = r"""
-        You have to start your answer with the following structure for the latex font :
-        \documentclass{article}
-        \usepackage{fontspec}
-        \usepackage{amsmath}
-        \usepackage{mathspec}
-        \usepackage[paperwidth=6in,margin=0.1in]{geometry}
+        self.languages = languages
 
-        \setmainfont{%s}
-        \setmathsfont(Digits,Latin){%s}
-
-        \begin{document}
-
-        """ % (
-            self.font,
-            self.font,
-        )
+        self.header_template = f"""
+        You should keep the simple default layout. You have to start your answer with the following structure for the LaTeX header:
+        \\begin{{document}}
+        """
 
     def generate_latex_question(self, exercise_number, answer):
         """
@@ -54,9 +36,17 @@ class LatexGenerator:
         """
         Generates LaTeX solutions for a series of math exercises and writes them to files.
         """
+        # print that we are generating i LaTeX files with their text color and page color
+        print(f"Generating LaTeX files...") 
         for i in range(1, self.iterations + 1):
             question = self.generate_latex_question(i, i)
-            request = question + self.header_template
+
+            language = random.choice(self.languages)
+            language_template = " Your answer has to be in " + language + " language. "
+
+            add_mistakes = "Strike through 1 realistic word mistake (not digit) if needed in the answer using the \\strikeMistake. All what you have to do is \\strikeMistake{a mistake}. "
+
+            request = question + language_template + add_mistakes + self.header_template
 
             res = self.client.chat.completions.create(
                 model="meta-llama/Meta-Llama-3.1-70B-Instruct",
@@ -75,17 +65,18 @@ class LatexGenerator:
                     answer += chunk.choices[0].delta.content
 
             # Extract LaTeX content starting from the first LaTeX command
-            answer = answer[answer.find("\\") :]
+            answer = answer[answer.find('\\begin{document}'):]
 
-            directory = "generated_data/tex_content"
+            # Create the directory for the current iteration
+            directory = f'data/latex/{i}'
             os.makedirs(directory, exist_ok=True)
 
             # Write the generated LaTeX to a file
-            file_name = f"{directory}/answer_{i}.tex_content"
-            with open(file_name, "w") as f:
+            file_name = f'{directory}/content.tex'
+            with open(file_name, 'w') as f:
                 f.write(answer)
 
-            print(f"Generated LaTeX solution for exercise {i}: {file_name}")
+            print(f"Generated LaTeX {i}: {file_name}")
 
 
 if __name__ == "__main__":

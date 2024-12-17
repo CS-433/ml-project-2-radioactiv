@@ -1,0 +1,128 @@
+\documentclass[varwidth=true, border=10mm]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\newcommand{\strikeMistake}[1]{
+    \begin{tikzpicture}[baseline=(text.base)]
+        \node[inner sep=1pt] (text) {#1};        
+        \draw[line width=1pt] 
+            ($(text.west)+(-0.2mm,0.4mm)$) .. controls 
+            ($(text.west)+(1mm,1mm)$) and 
+            ($(text.center)+(-2mm,0mm)$) ..
+            ($(text.center)+(0mm,1mm)$) .. controls
+            ($(text.center)+(2mm,2mm)$) and 
+            ($(text.east)+(-2mm,0.5mm)$) ..
+            ($(text.east)+(0.2mm,1mm)$);
+        \draw[line width=1pt] 
+            ($(text.west)+(0mm,-0.2mm)$) .. controls 
+            ($(text.west)+(1.5mm,-0.5mm)$) and 
+            ($(text.center)+(-1mm,-1mm)$) ..
+            ($(text.center)+(1mm,-0.5mm)$) .. controls
+            ($(text.center)+(3mm,-0.7mm)$) and 
+            ($(text.east)+(-1mm,-0.3mm)$) ..
+            ($(text.east)+(0.5mm,-0.5mm)$);
+        \draw[line width=1pt] 
+            ($(text.west)+(0mm,0mm)$) .. controls 
+            ($(text.west)+(1mm,0.3mm)$) and 
+            ($(text.center)+(-1.5mm,-0.2mm)$) ..
+            ($(text.center)+(0mm,0.2mm)$) .. controls
+            ($(text.center)+(1.5mm,0.4mm)$) and 
+            ($(text.east)+(-1.5mm,0.1mm)$) ..
+            ($(text.east)+(0.5mm,-0.5mm)$);
+    \end{tikzpicture}
+}
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{mathspec}
+\usepackage{xcolor} 
+\setmainfont{JaneAusten}[
+    Extension=.otf,
+    UprightFont=*,
+    FallbackFonts={% 
+        {font=Times New Roman}    
+    }
+]
+\setmathsfont(Digits,Latin){JaneAusten}
+
+\pagecolor{white}
+\color{black}
+
+
+\newcommand{\irregularword}[1]{%
+  \pgfmathsetmacro{\yshift}{(random()-0.5)*3} % Random y-shift between -3pt and 3pt
+  \pgfmathsetmacro{\rotation}{(random()-0.5)*10} % Random rotation between -5° and 5°
+  \tikz[baseline]{
+    \node[inner sep=0pt, outer sep=0pt, anchor=base, yshift=\yshift pt, rotate=\rotation] (text) {\strut #1};
+  }%
+}
+
+\usepackage{xparse}
+\ExplSyntaxOn
+\NewDocumentCommand{\processtext}{+m}{
+  \seq_set_split:Nnn \l_tmpa_seq { ~ } { #1 }
+  \seq_map_inline:Nn \l_tmpa_seq { \irregularword{##1} }
+}
+\ExplSyntaxOff
+\begin{document}
+
+\section*{Exercice 1}
+
+\processtext{Résolvez l'équation :}
+
+$$\sqrt{x+2} = 2x - 3$$
+
+\subsection*{Correction}
+
+Étape 1 : Mettre au carré les deux côtés de l'équation pour éliminer la racine carrée :
+
+$$x + 2 = (2x - 3)^2$$
+
+\processtext{Étape 2 : Développer le membre de droite :}
+
+$$x + 2 = 4x^2 - 12x + 9$$
+
+Étape 3 : Réorganiser l'équation pour obtenir une équation quadratique :
+
+$$4x^2 - 13x + 7 = 0$$
+
+\processtext{Étape 4 : Résoudre l'équation quadratique en factorisant :}
+
+$$(4x - 1)(x - 7) = 0$$
+
+Étape 5 : Résoudre pour x :
+
+$$x = \frac{1}{4} \mbox{ ou } x = 7$$
+
+\processtext{Cependant, nous devons vérifier nos solutions en les remplaçant dans l'équation d'origine pour éviter les solutions extranées.}
+
+En remplaçant $x = \frac{1}{4}$ dans l'équation d'origine, nous obtenons :
+
+$$\sqrt{\frac{1}{4} + 2} = 2 \cdot \frac{1}{4} - 3 \Longrightarrow \sqrt{\frac{9}{4}} = -\frac{5}{2}$$
+
+Ce qui est faux, donc $x = \frac{1}{4}$ est une solution extranée.
+
+En remplaçant $x = 7$ dans l'équation d'origine, nous obtenons :
+
+$$\sqrt{7 + 2} = 2 \cdot 7 - 3 \Longrightarrow \sqrt{9} = 11$$
+
+Ce qui est également faux, \strikeMistake{donc} donc $x = 7$ n'est pas une solution.
+
+\processtext{En re-examinant nos calculs, nous nous rendons compte que nous avons commis une erreur en réorganisant l'équation quadratique. La bonne réorganisation est :}
+
+$$4x^2 - 13x + 7 = 4x^2 - 12x - x + 7 = (4x^2 - 12x) - (x - 7) = 0$$
+
+En factorisant, on obtient :
+
+$$4x(x - 3) - 1(x - 7) = 0$$
+
+\processtext{En factorisant à nouveau, on obtient :}
+
+$$(4x - 1)(x - 7) = 0$$
+
+Ce qui nous donne les mêmes solutions que précédemment. Cependant, en re-vérifiant nos solutions, nous nous rendons compte que $x = 1$ est en réalité la solution de l'équation d'origine.
+
+La réponse finale est donc :
+
+$$x = 1$$
+
+\end{document}

@@ -1,0 +1,6 @@
+**/__pycache__/
+.env
+data/.DS_Store
+.DS_Store
+generated_data/
+data/
