@@ -1,28 +1,33 @@
 import os
 from latex_generator import LatexGenerator
-from latex_utils import *
-from stroke_extraction import handwrite
+from utils import *
 from dotenv import load_dotenv
 
-def transform_handwriting(input_dir="generated_data/pdf"):
-    """Transform all PDF files in the 'pdf' subfolder to handwritten SVG and PNG files."""
-    pdf_files = [os.path.join(input_dir, f) for f in os.listdir(input_dir) if f.endswith(".pdf")]
-    for pdf_file in pdf_files:
-        handwrite(pdf_file, "./generated_data/svg/handwriting_strokes.svg", "./generated_data/png/handwriting_strokes_1.png")
+# TODO fontsize
+# \setmainfont[Scale=2.0]{ML4Science}
 
 if __name__ == "__main__":
     load_dotenv()
     api_key = os.getenv("API_KEY")
 
-    generator = LatexGenerator(api_key, iterations=2)
-    generator.generate_latex()
+    latex_dir = "data/latex"
+    generated_dir = "data/generated"
 
-    fonts = ["JaneAusten", "ML4Science"]
+    languages = ["English", "French", "German", "Italian"]
+    fonts = ["ML4Science", "JaneAusten"]
     pagecolors = ["white"]
     textcolors = ["black"]
-    add_mistakes("generated_data/tex")
-    headers = create_headers(fonts, pagecolors, textcolors)
-    add_headers("generated_data/tex", headers)
-    convert_tex_to_pdf("generated_data/tex")
-    convert_pdf_to_pngs("generated_data/pdf")
-    add_noise_and_blur()
+
+    generator = LatexGenerator(api_key, languages=languages, iterations=2)
+    generator.generate_latex()
+
+    headers, paths = create_headers(fonts, pagecolors, textcolors)
+    add_headers(tex_dir=latex_dir, headers=headers, paths=paths)
+
+    convert_tex_to_pdf(input_dir=latex_dir, ouptur_dir=generated_dir)
+
+    convert_pdf_to_pngs(input_dir=generated_dir)
+    add_noise_and_blur(directory=generated_dir, noise_level=100, blur_radius=2)
+
+    delete_pdfs(pdf_dir=generated_dir)
+    clean_tex_headers(tex_dir=latex_dir)

@@ -6,9 +6,8 @@ def run_command(command):
     try:
         subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
     except subprocess.CalledProcessError as e:
-        print(f"Error executing command: {command}")
-        print(e.stderr)
-        exit(1)
+        # print("Some pdf files might not render correctly.")
+        return
 
 def check_file_exists(filename):
     """Check if a file exists."""
