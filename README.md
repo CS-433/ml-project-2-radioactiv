@@ -1,55 +1,86 @@
 # Handwriting data creation
 This project is our second project for the ML Course at EPFL.
 
-## Overview
-This project aims to generate a dataset of synthetic "handwritten" math exercises. The generated data simulates student solutions that can be later recognized and automatically graded. By producing LaTeX-based exercises, rendering them as PDFs and PNG images, and introducing noise and blur, we create a dataset that closely resembles scanned, handwritten documents. This dataset can then be used to train machine learning models for text detection, OCR, and automated grading.
-## Overview
-This project aims to generate a dataset of synthetic "handwritten" math exercises. The generated data simulates student solutions that can be recognized and automatically graded. By producing LaTeX-based exercises, rendering them as PDFs and PNG images, and introducing noise and blur, we create a dataset that closely resembles scanned, handwritten documents. This dataset can then be used to train machine learning models for text detection, OCR, and automated grading.
 
+## Team Members
+- David Schulmeister
+- Amene Gafsi
+- Rosa Mayila
+
+## Overview
+This project generates synthetic "handwritten" math exercises to simulate student solutions. The output is designed for use in training machine learning models for tasks such as text detection, OCR, and automated grading. By leveraging language models, the pipeline creates LaTeX-based exercises, converts them into PDFs and PNG images, and applies realistic augmentations like noise, blur, and simulated mistakes. This approach produces data that closely resembles scanned handwritten documents while incorporating irregular formatting and errors to mimic human handwriting.
 ## Key Features
-- **Model Interaction:** Utilizes a language model (via the `ModelCommunicator` class) to generate math exercises in different languages, complexity levels, and correctness states.
-- **LaTeX Rendering:** Dynamically inserts generated math exercises into LaTeX templates to produce stylized PDFs.
-- **Rich Formatting:** Simulates student mistakes and handwriting irregularities by:
-    - Introducing strikethrough text to mimic crossed-out corrections.
-    - Adding wiggling text via a special LaTeX command for irregular word placement.
-- **Conversion to PNG and Image Augmentations:**
-    - Converts the rendered PDFs into PNG images.
-    - Adds noise and blur to approximate the appearance of real scanned handwriting.
+- **LaTeX-Based Exercise Generation:** Utilizes a language model to create math exercises with hard equations involving square roots, powers, and text explanations. Generated exercises are formatted in LaTeX.
+
+- **Multi-Language Support:** Exercises can be generated in various languages, including English, French, German, and Italian.
+
+- **Mistake Simulation:** Adds a realistic touch by striking through a word using a LaTeX `\strikeMistake` command to mimic student corrections.
+
+- **Handwriting Irregularities:** Dynamically adjusts text placement with a custom `\processtext` LaTeX command to introduce word irregularities.
+
+- **PDF and PNG Conversion:**
+    - Compiles LaTeX documents into PDFs.
+    - Converts PDFs into high-resolution PNG images for broader usability.
+
+- **Image Augmentations:**
+    - Adds noise and blur to PNG images to simulate real-world scanned handwriting artifacts.
+    - Generates multiple versions of the same exercise with different visual distortions.
+
+- **Flexible Design Templates:**
+    - Supports various fonts (e.g., "ML4Science" and "JaneAusten").
+    - Allows customization of page colors, text colors, and optional grid overlays.
 
 ## Repository Structure
 
-**Key Files:**
-- **`model_communicator.py`**  
-  Handles communication with the language model API. It sends prompts and receives responses from the model. It also includes a function `clean_answer_format` to extract only the necessary LaTeX content from model responses.
+## Repository Structure
+
+**Key Files and Directories:**
+
+- **`latex_generator.py`**  
+  Handles LaTeX-based exercise generation using a language model API. It:
+    - Generates exercises with equations and explanations in LaTeX.
+    - Supports language variation and mistake simulation.
+    - Saves generated LaTeX content to structured directories.
+
+- **`main.py`**  
+  The main script orchestrating the full pipeline. It:
+    - Generates LaTeX exercises.
+    - Applies headers and templates to the LaTeX files.
+    - Converts LaTeX to PDFs and PDFs to PNG images.
+    - Adds noise and blur to simulate scanned handwritten artifacts.
 
 - **`utils.py`**  
-  Provides utility functions to handle LaTeX compilation, PDF-to-PNG conversion, cropping, and image augmentation (noise and blur). It also defines template generation for LaTeX documents.
+  Contains utility functions to:
+    - Compile LaTeX files into PDFs.
+    - Convert PDFs to PNG images.
+    - Add noise and blur to images.
+    - Manage directories, clean auxiliary files, and generate LaTeX headers.
 
-- **`prompts.py`**  
-  Contains the `get_math_exercise_prompt` function, which creates a detailed prompt to request math exercises from the language model. The prompt can include instructions for correctness, complexity, and special formatting commands (e.g., strikes and irregular text).
+- **`os_utils.py`**  
+  Provides helper functions to run shell commands and check file existence.
 
-- **`main_script.py`** (or the provided script with the `pipeline` function)  
-  The main entry point to generate a batch (`k`) of math exercises. It:
-    - Randomizes parameters (language, complexity, colors, strikes, grids).
-    - Requests an exercise from the model.
-    - Generates a LaTeX file from the returned content.
-    - Compiles it to PDF, then converts it to PNG.
-    - Adds noise and blur to the PNG to simulate real handwriting scans.
+- **`data/`**  
+  Directory where all generated data is stored:
+    - `latex/`: Contains generated LaTeX files.
+    - `generated/`: Contains compiled PDFs and PNG images with augmentations.
+
+- **`.env`**  
+  Store here the API key for the language model API.
 
 ## Dependencies and Requirements
 
+
+### System Requirements
 - **Programming Language:** Python 3.8+
 - **System Tools:**
-    - `xelatex` (from TeX Live or MiKTeX) for LaTeX compilation
-    - `pdfcrop` for cropping PDF margins
-    - `pdftoppm` for converting PDF to PNG images (part of `poppler` tools)
+    - `xelatex` (for LaTeX compilation, part of TeX Live or MiKTeX)
+    - `pdftoppm` (from `poppler-utils` for PDF-to-PNG conversion)
 - **Python Packages:**
     - `openai` (for the language model API client)
     - `numpy` (for noise generation)
     - `Pillow` (for image processing: noise and blur)
     - `dotenv` (to load environment variables)
 
-  Additional packages might be required depending on your environment and OS.
 
 ## Setup
 
@@ -74,42 +105,58 @@ This project aims to generate a dataset of synthetic "handwritten" math exercise
     ```
     Replace `your_api_key_here` with your actual API key. Make sure you have permission to use the provided model endpoint.
 
+4. **Directory Structure:** Ensure the following directory structure exists:
+
+    ```
+    handwriting_data_creation/
+    ├── .env
+    ├── latex_generator.py
+    ├── main.py
+    ├── utils.py
+    ├── os_utils.py
+    ├── data/
+    │   ├── latex/
+    │   └── generated/
+    └── requirements.txt
+    ```
+
 ## Usage
 
-**1. Run the Pipeline:** In the main script (e.g., `python pipeline.py` or the provided snippet in `if __name__ == "__main__":`), the `pipeline` function is called with `k=10` by default to generate 10 exercises.
+**1. Run the Pipeline:** In the main script (e.g., `main.py` or the provided snippet in `if __name__ == "__main__":`)
 
 
 **Example:**
 
 ```bash
-python pipeline.py
+python main.py
 ```
 This will:
 - Load the API_KEY from `.env`.
 - Interact with the model to generate prompts and exercises.
 - Create LaTeX documents, compile them to PDFs, and convert to PNGs.
 - Add noise and blur to the generated images.
-- Store the outputs under the specified `base_dir` (e.g., `example01`).
 
 **2. Adjust Parameters:** You can customize:
 
-- `k`: Number of exercises to generate.
-- `base_dir`: The base output directory for generated files.
-- `font`: The main and math fonts for the LaTeX templates.
-- Other parameters such as `language`, `complexity`, `correct`, `strike` can be modified by editing code in `pipeline` or `get_math_exercise_prompt`.
-- 
+    You can customize the following parameters in main.py:
+    •	languages: List of supported languages (e.g., ["English", "French", "German"]).
+    •	fonts: Fonts used in LaTeX documents (e.g., ["ML4Science", "JaneAusten"]).
+    •	iterations: Number of exercises to generate.
+    •	Augmentations: Adjust noise and blur levels in the add_noise_and_blur function.
+
+
 **3. Viewing Results:** After running the pipeline, check:
 
-    - `tex_content/`: Contains the generated LaTeX exercise content.
-    - `tex_files/`: Contains the `.tex` files used for compilation.
-    - `generated/`: Contains the compiled PDFs and PNG images. You’ll find both noisy and blurred variants, simulating handwritten scans.
+    	LaTeX files will be stored under data/latex/.
+	•	PDFs and augmented PNGs will be available under data/generated/.
 
+    Each exercise will have:
+    •	A clean version (PNG).
+    •	Noisy and blurred versions of the PNG files.
+    
+    You can view the generated images in any image viewer or open the LaTeX files for further customization.
 ## Extending the Project
 
-**Prompts and Content:** Modify `prompts.py` to request different types of math exercises, adjust complexity, language distribution, or incorporate more intricate instructions for the layout.
-**Model Choice:** Update the model endpoint or API key in `ModelCommunicator` for different LLMs or model APIs.
-**Post-Processing:** Enhance image augmentation methods or introduce additional processing steps to better mimic real handwriting artifacts.
-**Testing:** Consider adding unit tests or integration tests to ensure reliability.
 
 ## Troubleshooting
 
