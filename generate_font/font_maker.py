@@ -6,6 +6,7 @@ import unicodedata
 
 
 def process_png_files(svg_dir):
+    os.makedirs(svg_dir,exist_ok=True)
     return sorted(
         [f for f in os.listdir(svg_dir) if f.endswith(".svg")],
         key=lambda x: int(x.split("_")[1].split(".")[0]),
@@ -103,6 +104,28 @@ def char_has_ascender(char):
 
     return False
 
+def create_space_glyph(font, width=250):
+    """
+    Ensure the space glyph exists and set its width.
+    Args:
+        font: The fontforge font object.
+        width: Desired width for the space glyph.
+    """
+    # Unicode for space character is 0x0020
+    space_unicode = 0x0020
+    space_glyph_name = "space"
+
+    # Create or access the space glyph
+    if space_glyph_name not in font:
+        print("Creating space glyph...")
+        space_glyph = font.createChar(space_unicode, space_glyph_name)
+    else:
+        print("Accessing existing space glyph...")
+        space_glyph = font[space_unicode]
+
+    # Set the width for the space glyph
+    space_glyph.width = width
+    print(f"Set space glyph width to {width} units.")
 
 def create_font(
     font_name, author, unicode_map, glyph_files, glyphs_dir, output_font_path
@@ -146,7 +169,7 @@ def create_font(
             if "lowercase" in classification:
                 target_max_height = 550 if has_ascender else 450
             elif "uppercase" in classification:
-                target_max_height = 800 if has_ascender else 700
+                target_max_height = 750 if has_ascender else 700
             elif "math symbol" in classification:
                 target_max_height = 500
             else:
@@ -182,7 +205,8 @@ def create_font(
                 )
 
             # Update the glyph width
-            glyph.width = int(xmax - xmin) + 10  # Add 5 units padding on both sides
+            glyph.width = int(xmax - xmin) + 5  # Add 5 units padding on both sides
+            
 
             # Adjust vertical alignment
             xmin, ymin, xmax, ymax = glyph.boundingBox()
@@ -193,8 +217,8 @@ def create_font(
                 glyph.transform(psMat.translate(0, 250 - vertical_center))
             elif "accent" in classification or char in {"'", "´", "`", "^"}:
                 # Ensure accents and apostrophes top align at around 700
-                if ymax != 700:
-                    adjustment = 700 - ymax
+                if ymax != 600:
+                    adjustment = 600 - ymax
                     glyph.transform(psMat.translate(0, adjustment))
             elif has_descender:
                 # Ensure descender aligns with -10
@@ -207,6 +231,9 @@ def create_font(
             print(f"Error processing character '{char}': {e}")
             continue
 
+    # reduce space between chars
+    create_space_glyph(font)
+    
     font.generate(output_font_path, flags=("opentype"))
     print(f"Font file generated: {output_font_path}")
 

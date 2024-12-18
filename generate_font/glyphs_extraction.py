@@ -358,8 +358,7 @@ def extract_glyphs(
 
                 idx += 1
 
-
-if __name__ == "__main__":
+def main():
 
     filled_templates = get_sorted_templates(FILLED_TEMPLATES_DIR, EXTENSION)
     extract_glyphs(
@@ -369,3 +368,7 @@ if __name__ == "__main__":
         BORDER_WIDTH,
         GLYPHS_OUT_DIR,
     )
+
+if __name__ == "__main__":
+
+    main()

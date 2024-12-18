@@ -72,17 +72,18 @@ project_root/
 │
 └── fonts/                        
     └── latinmodern-math.otf      # Font file used for template generation.
+```
 
 ## Key Files 
-    1. **config.py**: Contains all configurable parameters, including template layout, font size, grid dimensions, and file paths.
-    2. **template.py**: Generates character grid templates as PNG and PDF files for handwritten glyph input.
-    3. **glyphs_extraction.py**: Extracts glyphs from filled templates, cleans them, and converts them to vector format using Potrace.
-    4. **font_maker.py**: Processes extracted SVG glyphs and integrates them into an OpenType font file.
-    5. **font_builder.py**: Entry point to trigger the FontForge script for font creation.
-    6. **Unicode_to_Character_Mapping.csv**: Defines the Unicode-to-character mapping for supported glyphs.
+1. **config.py**: Contains all configurable parameters, including template layout, font size, grid dimensions, and file paths.
+2. **template.py**: Generates character grid templates as PNG and PDF files for handwritten glyph input.
+3. **glyphs_extraction.py**: Extracts glyphs from filled templates, cleans them, and converts them to vector format using Potrace.
+4. **font_maker.py**: Processes extracted SVG glyphs and integrates them into an OpenType font file.
+5. **font_builder.py**: Entry point to trigger the FontForge script for font creation.
+6. **Unicode_to_Character_Mapping.csv**: Defines the Unicode-to-character mapping for supported glyphs.
     
-    ## Directories
-    1. **fonts/**: Stores base font files used for template generation.
+## Directories
+1. **fonts/**: Stores base font files used for template generation.
 
 ## Dependencies and Requirements
 
@@ -126,24 +127,33 @@ python template.py
 
 This will generate templates in PNG and PDF formats and save the output in the `character_templates/` directory.
 
-4. Extract Glyphs
-   Once you fill the templates with handwritten or graphical content, extract the glyphs by running:
+
+This will process the filled templates, remove borders and backgrounds, and save the extracted glyphs as SVG files in the `extracted_glyphs/` directory.
+
+4. Create the Font
+    Once you fill the templates with handwritten or graphical content, the following command will allow you to:
+    - Extract the glyphs
+    - Process the extracted glyphs from the `extracted_glyphs/` directory.
+    - Generate a custom OpenType font file in the `temp_out/` directory. 
+
+```bash
+python font_builder.py
+```
+
+If you are only interested in extracting the glyphs (to build a handwriting symbols dataset for example), only run the glyph extraction script :
 
 ```bash
 python glyphs_extraction.py
 ```
 
-This will process the filled templates, remove borders and backgrounds, and save the extracted glyphs as SVG files in the `extracted_glyphs/` directory.
+The glyphs are saved as SVG files in the `extracted_glyphs/` directory
 
-5. Create the Font
-    Generate the final font using FontForge with the following command:
 
-```bash
-python font_builder.py
-```
-This will:
-- Process the extracted glyphs from the `extracted_glyphs/` directory.
-- Generate a custom OpenType font file in the `temp_out/` directory.
+5. Review the Font
+    Check the generated font in the `temp_out/` directory. You can install the font on your system to use it in text editors, design software, or other applications. Or you can use the extracted glyphs for any handwriting recognition task.
 
-6. Review the Font
-    Check the generated font in the `temp_out/` directory. You can install the font on your system to use it in text editors, design software, or other applications.
+Remarks:
+
+- glyph_**i** in the extracted_glyphs directory will always be associated to the **ith** element defined in the unicode to character mapping.
+
+- when filling the templates, try to not get too close from the border (specically the bottom of the square) otherwise your glyph will be truncated.

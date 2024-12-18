@@ -17,9 +17,9 @@ TEMPLATE_WIDTH = COL_WIDTH * BOX_COL_NUM
 TEMPLATE_HEIGHT = ROW_HEIGHT * ROWS_BY_PAGE
 
 # PATHS
-UNICODE_CSV = "math_font/Unicode_to_Character_Mapping.csv"  # Total characters per page
-TEMPLATE_FONT_PATH = "fonts/latinmodern-math.otf"
-TEMPLATES_OUT_DIR = "character_templates"  # Directory to save templates
+UNICODE_CSV = "generate_font/Unicode_to_Character_Mapping.csv"  # Total characters per page
+TEMPLATE_FONT_PATH = "generate_font/fonts/latinmodern-math.otf"
+TEMPLATES_OUT_DIR = "generate_font/character_templates"  # Directory to save templates
 
 
 ################ GLYPH EXTRACTION VARIABLES ##################################################################################
@@ -28,9 +28,9 @@ TEMPLATES_OUT_DIR = "character_templates"  # Directory to save templates
 BORDER_COLOR = (128, 128, 128)
 BORDER_WIDTH = 2
 # Directories
-FILLED_TEMPLATES_DIR = "filled_templates"  # Directory containing template images
+FILLED_TEMPLATES_DIR = "generate_font/filled_templates"  # Directory containing template images
 EXTENSION = ".pdf"
-GLYPHS_OUT_DIR = "extracted_glyphs"  # Directory to save extracted glyphs
+GLYPHS_OUT_DIR = "generate_font/extracted_glyphs"  # Directory to save extracted glyphs
 
 
 ################ EMPTY FONT BASE VARIABLES ##################################################################################
@@ -40,4 +40,4 @@ AUTHOR = "ML4Science"
 
 ################ EMPTY FONT BASE VARIABLES ##################################################################################
 
-TEMP_FONT_PATH = "temp_out/ML4Science-Math.otf"
+TEMP_FONT_PATH = "generate_font/temp_out/ML4Science-Math.otf"
