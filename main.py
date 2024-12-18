@@ -3,10 +3,6 @@ from latex_generator import LatexGenerator
 from utils import *
 from dotenv import load_dotenv
 
-# TODO fontsize
-# \setmainfont[Scale=2.0]{ML4Science}
-
-
 # Define the directories for the LaTeX scripts and images to generate
 latex_dir = "dataa/LaTeX"
 generated_dir = "dataa/PNG"
