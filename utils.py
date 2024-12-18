@@ -1,13 +1,9 @@
 import os
-from os_utils import run_command, check_file_exists
+from os_utils import *
 from PIL import Image, ImageFilter
 import numpy as np
 import random
 import re
-
-def create_folder(folder_name):
-    """Create a folder if it doesn't exist."""
-    os.makedirs(folder_name, exist_ok=True)
 
 def compile_tex_to_pdf(tex_path, output_path=None):
     """Compile a TeX file into a PDF and store it in the specified output path."""
@@ -26,7 +22,6 @@ def compile_tex_to_pdf(tex_path, output_path=None):
     if not check_file_exists(os.path.join(output_path, pdf_filename)):
         return None
 
-    # Ensure the PDF is in the correct folder
     return pdf_path_final
 
 def convert_pdf_to_png(pdf_path, dpi=500):
@@ -44,7 +39,7 @@ def convert_pdf_to_png(pdf_path, dpi=500):
     return output_path
 
 def delete_aux_files(tex_dir):
-    """Delete all auxiliary files in the specified directory."""
+    """Delete all auxiliary files generated during the TeX compilation process."""
     aux_extensions = [".aux", ".log", ".xdv"]
     
     # Iterate over all files in the directory
@@ -55,7 +50,7 @@ def delete_aux_files(tex_dir):
             os.remove(file_to_delete)
 
 def convert_tex_to_pdf(input_dir="data/latex", ouptur_dir="data/generated"):
-    """Convert all TeX files in the 'tex' subfolder to PDF files."""
+    """Convert all TeX files in the specified directory to PDF format."""
     print("Converting TeX files to PDF...")
     folders = get_subfolders(input_dir)
     for folder in folders:
@@ -64,11 +59,11 @@ def convert_tex_to_pdf(input_dir="data/latex", ouptur_dir="data/generated"):
         output_path = os.path.join(ouptur_dir, folder)
         for tex_file in tex_files:
             input_path = os.path.join(tex_path, tex_file)
-            compile_tex_to_pdf(input_path, output_path)  # Ensure this raises an exception on failure
+            compile_tex_to_pdf(input_path, output_path) 
             delete_aux_files(output_path)
 
 def convert_pdf_to_pngs(input_dir="generated_data/pdf"):
-    """Convert all PDF files in the 'pdf' subfolder to PNG files."""
+    """Convert all PDF files in the specified directory to PNG format."""
     print("Converting PDF files to PNG...")
     folders = get_subfolders(input_dir)
     for folder in folders:
@@ -88,8 +83,8 @@ def add_headers_to_tex(tex_path, headers, paths):
     tex_content = add_irregularities(tex_content)
     if not tex_content.lstrip().startswith(r"\begin{document}"):
         return
-    with open(tex_path, "w", encoding="utf-8") as tex_file:
-        tex_file.write(tex_content)
+    # with open(tex_path, "w", encoding="utf-8") as tex_file:
+    #     tex_file.write(tex_content)
         
     for idx, header in enumerate(headers):
         new_tex_content = header + tex_content
@@ -101,6 +96,7 @@ def add_headers_to_tex(tex_path, headers, paths):
             new_tex_file.write(new_tex_content)
     
 def clean_tex_headers(tex_dir="data/latex"):
+    """ Delete all TeX files except 'content.tex' in the specified directory"""
     print("Cleaning TeX headers...")
     folders = get_subfolders(tex_dir)
     for folder in folders:
@@ -111,6 +107,7 @@ def clean_tex_headers(tex_dir="data/latex"):
             os.remove(tex_path)
 
 def delete_pdfs(pdf_dir="data/generated"):
+    """ Delete all PDF files in the specified directory. """
     print("Deleting PDF files...")
     folders = get_subfolders(pdf_dir)
     for folder in folders:
@@ -122,7 +119,7 @@ def delete_pdfs(pdf_dir="data/generated"):
 
 def add_headers(tex_dir="data/latex", headers=["\\documentclass{article}\n"], paths=["default"]):
     """
-    Add headers to all TeX files in the 'tex' subfolder.
+    Add headers to all TeX files.
     """
     folders = get_subfolders(tex_dir)
     for folder in folders:
@@ -132,11 +129,7 @@ def add_headers(tex_dir="data/latex", headers=["\\documentclass{article}\n"], pa
         for tex_file in tex_files:
             tex_path = os.path.join(tex_directory, tex_file)
             add_headers_to_tex(tex_path, headers, paths)
-             
-def get_subfolders(folder):
-    subfolders = [d for d in os.walk(folder)][0][1]
-    return subfolders
-
+            
 def create_headers(fonts, pagecolors = ["white"], textcolors = ["black"]):
     """
     Generate a list of LaTeX headers based on fonts, page colors, and text colors.
@@ -203,6 +196,7 @@ def create_headers(fonts, pagecolors = ["white"], textcolors = ["black"]):
     return (headers, paths)
 
 def add_noise_and_blur(directory="data/generated", noise_level=100, blur_radius=2):
+    """ Generates noisy and blurred versions of PNG images in the specified directory. """
     print("Adding noise and blur...")
     if not os.path.exists(directory):
         return
@@ -240,7 +234,7 @@ def add_noise_and_blur(directory="data/generated", noise_level=100, blur_radius=
             blurred_noisy_img.save(blurred_noisy_file_path)
 
 def get_font_template(font_name: str):
-  """Generate LaTeX font configuration for a specified font, including special handling for 'ML4Science'."""
+  """Generate LaTeX font configuration for a specified font, including special handling for 'ML4Science' font."""
   
   font_template = r"""\setmainfont{font_name}[
     Extension=.otf,
@@ -252,8 +246,6 @@ def get_font_template(font_name: str):
 \setmathsfont(Digits,Latin){font_name}
 """.replace("font_name", font_name)
   
-
-
   if font_name == "ML4Science":
       font_code =r"""\setmainfont{ML4Science}[
     Extension=.otf,
@@ -492,6 +484,7 @@ def get_strike_design():
     return strike_code
 
 def add_irregularities(tex_content):
+    """Add irregularities to the word alignements."""
     lines = tex_content.split('\n')
     modified_lines = []
     skip_processing_bracket = False
@@ -519,3 +512,27 @@ def add_irregularities(tex_content):
     
     modified_tex_content = '\n'.join(modified_lines)
     return modified_tex_content
+
+def ensure_raw_tex(tex_content):
+    """
+    Ensure that the given TeX content starts with \begin{document} and ends with \end{document}.
+    
+    Parameters:
+    - tex_content (str): The content of a TeX file.
+
+    Returns:
+    - str: The corrected TeX content.
+    """
+    # Check if \begin{document} exists, if not add it at the beginning
+    if '\\begin{document}' not in tex_content:
+        tex_content = '\\begin{document}\n' + tex_content
+    else:
+        tex_content = tex_content[tex_content.find('\\begin{document}'):]
+
+    # Check if \end{document} exists, if not add it at the end
+    if '\\end{document}' not in tex_content:
+        tex_content += '\n\\end{document}'
+    else:
+        tex_content = tex_content[:tex_content.rfind('\\end{document}') + len('\\end{document}')]
+
+    return tex_content

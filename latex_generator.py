@@ -2,6 +2,7 @@ import openai
 import os
 from dotenv import load_dotenv
 import random
+from utils import ensure_raw_tex
 
 class LatexGenerator:
     def __init__(self, api_key, languages=["English"], base_url="https://fmapi.swissai.cscs.ch", iterations=5):
@@ -9,8 +10,8 @@ class LatexGenerator:
         Initializes the LatexGenerator instance.
 
         :param api_key: API key
+        :param languages: List of languages to use in the LaTeX document
         :param base_url: API base URL
-        :param font: The font to use in the LaTeX document
         :param iterations: Number of solutions to generate
         """
         self.client = openai.Client(api_key=api_key, base_url=base_url)
@@ -32,12 +33,11 @@ class LatexGenerator:
         """
         return f"Answer only in latex format : give an example of a student solution to a math exercise number {exercise_number} with hard equations involving sqrt and power and a text explanation. the answer should be {answer}"
 
-    def generate_latex(self):
+    def generate_latex(self, output_dir="data/latex"):
         """
         Generates LaTeX solutions for a series of math exercises and writes them to files.
         """
-        # print that we are generating i LaTeX files with their text color and page color
-        print(f"Generating LaTeX files...") 
+        print(f"Generating LaTeX files... \nWaiting for LLM Response...") 
         for i in range(1, self.iterations + 1):
             question = self.generate_latex_question(i, i)
 
@@ -65,10 +65,10 @@ class LatexGenerator:
                     answer += chunk.choices[0].delta.content
 
             # Extract LaTeX content starting from the first LaTeX command
-            answer = answer[answer.find('\\begin{document}'):]
+            answer = ensure_raw_tex(answer)
 
             # Create the directory for the current iteration
-            directory = f'data/latex/{i}'
+            directory = f"{output_dir}/{i}"
             os.makedirs(directory, exist_ok=True)
 
             # Write the generated LaTeX to a file
@@ -78,9 +78,3 @@ class LatexGenerator:
 
             print(f"Generated LaTeX {i}: {file_name}")
 
-
-if __name__ == "__main__":
-    load_dotenv()
-    api_key = os.getenv("API_KEY")
-    generator = LatexGenerator(api_key, font="JaneAusten", iterations=3)
-    generator.generate_latex()
