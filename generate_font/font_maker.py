@@ -6,6 +6,15 @@ import unicodedata
 
 
 def process_png_files(svg_dir):
+    """
+    Processes and sorts SVG files from a directory.
+
+    Args:
+        svg_dir (str): Path to the directory containing SVG files.
+
+    Returns:
+        list: Sorted list of SVG files based on their numeric suffix.
+    """
     os.makedirs(svg_dir,exist_ok=True)
     return sorted(
         [f for f in os.listdir(svg_dir) if f.endswith(".svg")],
@@ -14,6 +23,18 @@ def process_png_files(svg_dir):
 
 
 def get_character_data(csv_path):
+    """
+    Reads character data from a CSV file and stores it in a dictionary.
+
+    Args:
+        csv_path (str): Path to the CSV file containing Unicode and character mappings.
+
+    Returns:
+        dict: Dictionary where keys are characters and values are their Unicode values.
+
+    Raises:
+        FileNotFoundError: If the specified CSV file does not exist.
+    """
     character_data = {}
     try:
         with open(csv_path, "r", encoding="utf-8") as f:
@@ -39,6 +60,15 @@ def get_character_data(csv_path):
 
 
 def normalize_glyph_name(unicode_val):
+    """
+    Normalizes a glyph name based on its Unicode value.
+
+    Args:
+        unicode_val (int): Unicode value of the character.
+
+    Returns:
+        str: Normalized glyph name.
+    """
     try:
         glyph_name = unicodedata.name(chr(unicode_val)).lower().replace(" ", "_")
     except ValueError:
@@ -47,6 +77,12 @@ def normalize_glyph_name(unicode_val):
 
 
 def normalize_data_unicode_values(character_data):
+    """
+    Adds normalized glyph names to each character in the character data.
+
+    Args:
+        character_data (dict): Dictionary containing character data.
+    """
     for char, data in character_data.items():
         unicode_val = data["unicode"]
         glyph_name = normalize_glyph_name(unicode_val)
@@ -54,6 +90,15 @@ def normalize_data_unicode_values(character_data):
 
 
 def classify_char(char):
+    """
+    Classifies a character based on its Unicode name and category.
+
+    Args:
+        char (str): Character to classify.
+
+    Returns:
+        str: Classification of the character (e.g., lowercase Latin, math symbol).
+    """
     name = unicodedata.name(char, "UNKNOWN")
     category = unicodedata.category(char)
 
@@ -74,6 +119,15 @@ def classify_char(char):
 
 
 def char_has_descender(char):
+    """
+    Determines if a character has a descender.
+
+    Args:
+        char (str): Character to check.
+
+    Returns:
+        bool: True if the character has a descender, False otherwise.
+    """
     descender_latin = {"f", "g", "j", "p", "q", "y", "ÿ", "ý", "ç", "Ç", "ß"}
     descender_greek = {"γ", "η", "μ", "ξ", "φ", "χ", "ψ", "ϐ"}
 
@@ -90,6 +144,15 @@ def char_has_descender(char):
 
 
 def char_has_ascender(char):
+    """
+    Determines if a character has an ascender.
+
+    Args:
+        char (str): Character to check.
+
+    Returns:
+        bool: True if the character has an ascender, False otherwise.
+    """
     ascender_latin = {"b", "d", "h", "k", "l", "t"}
     ascender_greek = {"Ά", "Ή", "Ί", "Ό", "Ύ", "Ώ", "Η", "Θ", "Λ"}
 
@@ -106,10 +169,11 @@ def char_has_ascender(char):
 
 def create_space_glyph(font, width=250):
     """
-    Ensure the space glyph exists and set its width.
+    Creates or updates a space glyph in the font and sets its width.
+
     Args:
-        font: The fontforge font object.
-        width: Desired width for the space glyph.
+        font (fontforge.font): The font object.
+        width (int): Desired width of the space glyph.
     """
     # Unicode for space character is 0x0020
     space_unicode = 0x0020
@@ -130,6 +194,17 @@ def create_space_glyph(font, width=250):
 def create_font(
     font_name, author, unicode_map, glyph_files, glyphs_dir, output_font_path
 ):
+    """
+    Creates a font from SVG glyphs and character mappings.
+
+    Args:
+        font_name (str): Name of the font.
+        author (str): Name of the author.
+        unicode_map (dict): Dictionary mapping characters to Unicode values.
+        glyph_files (list): List of SVG files for glyphs.
+        glyphs_dir (str): Directory containing SVG glyph files.
+        output_font_path (str): Path to save the output font file.
+    """
     font = fontforge.font()
     font.fontname = font_name
     font.fullname = font_name

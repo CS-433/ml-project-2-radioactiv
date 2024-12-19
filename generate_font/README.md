@@ -157,3 +157,5 @@ Remarks:
 - glyph_**i** in the extracted_glyphs directory will always be associated to the **ith** element defined in the unicode to character mapping.
 
 - when filling the templates, try to not get too close from the border (specically the bottom of the square) otherwise your glyph will be truncated.
+
+![Font example](img/font_preview.png "Optional Title")
