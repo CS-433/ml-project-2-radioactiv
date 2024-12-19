@@ -57,7 +57,7 @@ This project generates synthetic "handwritten" math exercises to simulate studen
     - Manage directories, clean auxiliary files, and generate LaTeX headers.
 
 - **`os_utils.py`**  
-  Provides helper functions to run shell commands and check file existence.
+  Provides helper functions to run shell commands, check file existence, create folders, and retrieve subfolders.
 
 - **`data/`**  
   Directory where all generated data is stored:
@@ -116,7 +116,7 @@ This project generates synthetic "handwritten" math exercises to simulate studen
     ├── os_utils.py
     ├── data/
     │   ├── latex/
-    │   └── generated/
+    │   └── png/
     └── requirements.txt
     ```
 
@@ -141,20 +141,28 @@ This will:
     You can customize the following parameters in main.py:
     •	languages: List of supported languages (e.g., ["English", "French", "German"]).
     •	fonts: Fonts used in LaTeX documents (e.g., ["ML4Science", "JaneAusten"]).
-    •	iterations: Number of exercises to generate.
+    •	nbr_of_texfiles: Number of exercises to generate.
+    •	pagecolors : List of page background colors (e.g., ["white", "yellow"]).
+    •	textcolors : List of text colors (e.g., ["black", "darkblue", "red"]).
     •	Augmentations: Adjust noise and blur levels in the add_noise_and_blur function.
 
 
 **3. Viewing Results:** After running the pipeline, check:
 
     	LaTeX files will be stored under data/latex/.
-	•	PDFs and augmented PNGs will be available under data/generated/.
+	•	PDFs and augmented PNGs will be available under data/png/.
 
     Each exercise will have:
     •	A clean version (PNG).
     •	Noisy and blurred versions of the PNG files.
     
     You can view the generated images in any image viewer or open the LaTeX files for further customization.
+
+## Sample Dataset
+
+An example of the generated dataset can be downloaded here:  
+[**Download Sample Dataset (Google Drive, 3GB)**](https://drive.google.com/file/d/15wkfGyw2F403Ua3ErOjjhiMStaNv-jPf/view?usp=sharing)
+
 ## Extending the Project
 
 
