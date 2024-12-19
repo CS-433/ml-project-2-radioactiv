@@ -32,8 +32,6 @@ This project generates synthetic "handwritten" math exercises to simulate studen
 
 ## Repository Structure
 
-## Repository Structure
-
 **Key Files and Directories:**
 
 - **`latex_generator.py`**  
