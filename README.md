@@ -163,8 +163,6 @@ This will:
 An example of the generated dataset can be downloaded here:  
 [**Download Sample Dataset (Google Drive, 3GB)**](https://drive.google.com/file/d/15wkfGyw2F403Ua3ErOjjhiMStaNv-jPf/view?usp=sharing)
 
-## Extending the Project
-
 
 ## Troubleshooting
 
