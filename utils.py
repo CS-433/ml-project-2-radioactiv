@@ -178,6 +178,13 @@ def create_headers(fonts, pagecolors = ["white"], textcolors = ["black"]):
                     path = "_".join([textcolor + "text", pagecolor + "page", font, grid_path])
                     paths.append(path)
                     strike_code = get_strike_design()
+                    color_rgb1 = ""
+                    color_rgb2 = ""
+                    if textcolor == "darkblue":
+                        color_rgb1 = r"\definecolor{darkblue}{rgb}{0.0, 0.0, 0.55}"
+                    if pagecolor == "paper":
+                        color_rgb2 = r"\definecolor{paper}{rgb}{0.878, 0.788, 0.65}"
+
                     header = r"""\documentclass[varwidth=true, border=10mm]{standalone}
 \usepackage{tikz}
 \usetikzlibrary{calc}
@@ -187,11 +194,15 @@ def create_headers(fonts, pagecolors = ["white"], textcolors = ["black"]):
 \usepackage{mathspec}
 \usepackage{xcolor} 
 %s
+%s
+%s
 \pagecolor{%s}
 \color{%s}
 %s
 %s
-""" % (strike_code, font_code, pagecolor, textcolor, grid, irregularities)
+\setlength{\parindent}{0pt}
+\raggedright
+""" % (strike_code, font_code, color_rgb1, color_rgb2, pagecolor, textcolor, grid, irregularities)
                     headers.append(header)
     return (headers, paths)
 
