@@ -109,7 +109,7 @@ pip install pillow pdf2image svg.path fontforge
 
 ## Setup
 follow these steps to set up and run the project:
-1. install the required dependencies 
+1. Install the required dependencies 
 2. Ensure the following directories exist for proper execution. Missing directories will be automatically created during runtime:
     - `filled_templates/`: Place filled template images here for glyph extraction.
     - `extracted_glyphs/`: Output directory for extracted SVG glyphs.
@@ -127,8 +127,6 @@ python template.py
 
 This will generate templates in PNG and PDF formats and save the output in the `character_templates/` directory.
 
-
-This will process the filled templates, remove borders and backgrounds, and save the extracted glyphs as SVG files in the `extracted_glyphs/` directory.
 
 4. Create the Font
     Once you fill the templates with handwritten or graphical content, the following command will allow you to:
@@ -150,12 +148,15 @@ The glyphs are saved as SVG files in the `extracted_glyphs/` directory
 
 
 5. Review the Font
-    Check the generated font in the `temp_out/` directory. You can install the font on your system to use it in text editors, design software, or other applications. Or you can use the extracted glyphs for any handwriting recognition task.
+    Check the generated font in the `temp_out/` directory. You can install the font on your system to use it in text editors, design software, or other applications. Or you can use the extracted glyphs for any other task.
 
 Remarks:
 
 - glyph_**i** in the extracted_glyphs directory will always be associated to the **ith** element defined in the unicode to character mapping.
 
 - when filling the templates, try to not get too close from the border (specically the bottom of the square) otherwise your glyph will be truncated.
+- make sure the filled names templates are in the order they were generated.
+- **Glyphs are extracted in the same order the small boxes are created which means left to right and top to bottom.**
+
 
 ![Font example](img/font_preview.png "Optional Title")
